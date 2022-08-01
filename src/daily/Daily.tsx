@@ -1,7 +1,56 @@
 import { useEffect, useState } from 'react';
 import './Daily.sass';
 
+interface Link {
+    name: string;
+    url: string;
+    icon: string;
+}
+const defaultLinks = [
+    {
+        name: 'Wordle (ES)',
+        url: 'https://wordle.danielfrg.com/',
+        icon: 'https://www.saashub.com/images/app/service_logos/202/yUKyN9LATVn3/large.png'
+    },
+     {
+        name: 'Wordle (EN)',
+        url: 'https://www.nytimes.com/games/wordle/index.html',
+        icon: 'https://www.nytimes.com/games-assets/v2/metadata/wordle-favicon.ico?v=v2208011150',
+     },
+    {
+        name: 'Worldle',
+        url: 'https://worldle.teuteuf.fr/',
+        icon: 'https://worldle.teuteuf.fr/logo192.png'
+    },
+    {
+        name: 'Framed',
+        url: 'https://framed.wtf/',
+        icon: 'https://framed.wtf/favicon.ico'
+    },
+    {
+        name: 'Moviedle',
+        url: 'https://www.moviedle.app/likewise.html',
+        icon: 'https://www.moviedle.app/logo180.png'
+    },
+    {
+        name: 'Flagdle',
+        url: 'https://www.flagdle.org/',
+        icon: 'https://www.flagdle.org/favicon-16x16.png'
+    },
+    {
+        name: 'Flagdle',
+        url: 'https://www.flagdle.app/',
+        icon: 'https://www.flagdle.app/logo192.png'
+    },
+    {
+        name: 'Flagdle',
+        url: 'https://www.flagle.io/',
+        icon: 'https://www.flagle.io/favicon.ico'
+    }
+]
+
 export const DailyShuffle = () => {
+    const [links, setLinks] = useState<Link[]>([]);
     const [users, setUsers] = useState<string[]>([]);
     const [state, setState] = useState('ready');
     const [dropState, setDropState] = useState('no-dealing');
@@ -14,7 +63,10 @@ export const DailyShuffle = () => {
     useEffect(() => {
         const localUsers = localStorage.getItem('users');
         const usersParsed = localUsers ? JSON.parse(localUsers) : [];
+        const links = localStorage.getItem('links');
+        const linksParsed = links ? JSON.parse(links) : defaultLinks;
 
+        setLinks(linksParsed);
         setUsers(usersParsed);
         setUsersForm(usersParsed);
     }, []);
@@ -63,7 +115,11 @@ export const DailyShuffle = () => {
 
     const addNewUser = () => {
         setUsersForm([...usersForm, ''])
-    }
+    };
+
+    const handleClickLink = (url: string) => {
+        window.open(url, '_blank');
+    };
 
     return (
         <div className="container">
@@ -74,6 +130,10 @@ export const DailyShuffle = () => {
                 <button className="button" onClick={openConfig}>
                     <span>Config users</span>
                 </button>
+
+                {/* TODO: CONDIF Links <button className="button" onClick={openConfig}>
+                    <span>Config Links</span>
+                </button> */}
 
                 { configUsers &&
                     <div className="config-users">
@@ -147,6 +207,21 @@ export const DailyShuffle = () => {
                     ))
                 }
             </div>
+
+            {!!links.length && <div className="daily-links">
+                <div className="title">Daily games</div>
+                <div className="links">
+                    {links.map((link, index) => (
+                        <div key={`link-${index}-${link.name}`} className="link-container">
+                            <div className="link" onClick={() => handleClickLink(link.url)}>
+                                {link.icon && <img src={link.icon} alt={link.name} />}
+                                <p>{link.name}</p>
+                            </div>
+                            <div className="spacer" />
+                        </div>
+                    ))}
+                </div>
+            </div>}
         </div>
     )
 }
