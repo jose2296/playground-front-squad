@@ -9,8 +9,8 @@ interface Link {
 const defaultLinks = [
     {
         name: 'Wordle (ES)',
-        url: 'https://wordle.danielfrg.com/',
-        icon: 'https://www.saashub.com/images/app/service_logos/202/yUKyN9LATVn3/large.png'
+        url: 'https://lapalabradeldia.com',
+        icon: 'https://lapalabradeldia.com/images/logo_32x32.png'
     },
      {
         name: 'Wordle (EN)',
