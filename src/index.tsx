@@ -1,18 +1,28 @@
 
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';import {
+import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import App from './App';
 import { Golf } from './Golf/Golf';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
+const DailyV2 = lazy(() => import('./daily-v2/DailyV2'));
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/v2",
+    element: (
+      <div className="App">
+          <DailyV2 />
+      </div>
+    )
   },
   {
     path: "golf",
@@ -22,7 +32,9 @@ const router = createBrowserRouter([
 
 ReactDOM.render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <Suspense fallback={'Loading...'} >
+      <RouterProvider router={router}/>
+    </Suspense>
   </React.StrictMode>,
   document.getElementById('root')
 )

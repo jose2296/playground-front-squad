@@ -1,0 +1,196 @@
+\:root
+    --card-width: 150px
+    --card-height: 220px
+
+.container
+    flex-direction: column
+    background-image: url("/assets/Wallpaper-Ezzing.jpg")
+    background-repeat: no-repeat
+    background-size: cover
+    .wrapper
+        display: flex
+        flex-direction: row-reverse
+        width: 100%
+    .stepper-container
+        position: absolute
+        top: 50%
+        right: 0
+        transform: translateY(-50%)
+        padding-right: 40px
+        h1
+            padding-bottom: 20px
+        .steps
+            display: flex
+            flex-direction: column
+            width: 300px
+            align-items: center
+            color: white
+
+            .step-buttons
+                display: flex
+                gap: 20px
+                .button
+                    transform: scale(1)
+                    margin: 20px 0 0
+            .line
+                width: 1px
+                height: 40px
+                background-color: #fff
+            .step
+                width: 100%
+                display: flex
+                align-items: center
+                font-size: 22px
+                padding: 10px
+                border-radius: 14px
+                border: 2px solid white
+                background-color: black
+                &.done
+                    border-color: blue
+                &.active
+                    border-color: lime
+                .icon
+                    color: black
+                    width: 50px
+                    height: 50px
+                    border-radius: 50%
+                    background-color: #ffffff
+                    display: flex
+                    align-items: center
+                    justify-content: center
+                .text
+                    padding-left: 20px
+    .main
+        display: flex
+        flex-direction: column
+        width: 100%
+        .buttons
+            height: 100px
+            padding-bottom: 200px
+            margin-right: 30px
+            margin-top: 40px
+            button
+                margin-left: 60px
+                transform: scale(1.5)
+                &.small
+                    padding: 10px 15px
+        .config-users
+            padding: 30px
+            display: flex
+            flex-direction: column
+            justify-content: center
+            .button
+                transform: scale(1)
+                margin: 0 10px
+            .users
+                justify-content: center
+                display: flex
+                flex-wrap: wrap
+                gap: 20px
+                .user
+                    display: flex
+                    input
+                        padding: 10px
+                        width: 150px
+        .cards
+            display: flex
+            align-items: center
+            justify-content: center
+            position: relative
+            width: 100%
+            height: 300px
+            .card
+                position: absolute
+                transition: 1s
+                .inner
+                    box-shadow: inset 0px 0px 0px 10px rgb(255, 255, 255, 1), 0 1px 2px rgb(0, 0, 0, 0.2)
+                &.animate
+                    animation: shuffle .5s forwards
+                    animation-play-state: running
+                .text
+                    color: #111
+        .title
+            span
+                padding-bottom: 20px
+                font-size: 45px
+                text-transform: uppercase
+                font-weight: bold
+                color: white
+                display: inline
+                border-radius: 20px
+                border-bottom: 6px solid white
+                padding: 0 15px 5px 15px
+        .issues, .defectos
+            display: flex
+            justify-content: center
+            align-items: center
+            flex: 1
+            padding: 250px 0
+            .anchor-link
+                padding: 100px 100px
+                display: flex
+                flex-direction: column
+                justify-content: center
+                align-items: center
+                border: 4px solid white
+                border-radius: 14px
+                background-color: #123
+                color: white
+                font-weight: bold
+                font-size: 50px
+                text-decoration: none
+        .daily-links
+            padding: 300px
+            display: flex
+            flex: 1
+            .links-container
+                display: flex
+                justify-content: center
+                align-items: center
+                flex: 1
+            .links
+                display: flex
+                justify-content: center
+                flex-wrap: wrap
+                padding-top: 50px
+                .link-container
+                    display: flex
+                    padding: 10px 0
+                    &:last-child
+                        .spacer
+                            display: none
+                    .link
+                        transition: 0.6s
+                        color: white
+                        display: flex
+                        align-items: center
+                        text-decoration: none
+                        font-size: 28px
+                        cursor: pointer
+                        &:hover
+                            opacity: 0.6
+                        p
+                            padding-left: 10px
+                        img
+                            width: 40px
+                    .spacer
+                        margin: 0 20px
+                        width: 5px
+                        border-radius: 20px
+                        height: 100%
+                        background-color: white
+
+@keyframes shuffle
+    0%
+        transform: translateX(0)
+        z-index: 3
+    50%
+        transform: translateX(100px) translatey(15px)
+        z-index: 2
+    100%
+        transform: translateX(0)
+        z-index: 1
+
+@keyframes dropCards
+    100%
+        transform: translateX(200px)
