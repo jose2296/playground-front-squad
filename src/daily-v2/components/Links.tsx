@@ -1,16 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './links.sass';
+
 const links = [
     {
         name: 'Wordle (ES)',
         url: 'https://lapalabradeldia.com',
         icon: 'https://lapalabradeldia.com/favicon.ico'
     },
-     {
+    {
         name: 'Wordle (EN)',
         url: 'https://www.nytimes.com/games/wordle/index.html',
         icon: 'https://www.nytimes.com/games-assets/v2/metadata/wordle-favicon.ico?v=v2208011150',
-     },
+    },
     {
         name: 'Worldle',
         url: 'https://worldle.teuteuf.fr/',
@@ -21,11 +22,6 @@ const links = [
         url: 'https://framed.wtf/',
         icon: 'https://framed.wtf/favicon.ico'
     },
-    // {
-    //     name: 'Moviedle',
-    //     url: 'https://www.moviedle.app/likewise.html',
-    //     icon: 'https://www.moviedle.app/logo180.png'
-    // },
     {
         name: 'Flagdle',
         url: 'https://www.flagdle.org/',
@@ -43,12 +39,18 @@ const links = [
     }
 ]
 
+const GIPHY_API_KEY = 'lKqBhAgeKOGx2rJveh7LZJpvgRUpz8ss';
+
 export const Links = () => {
     const [currentIndexLink, setCurrentIndexLink] = useState(0);
     const [complete, setComplete] = useState(false);
+    const [randomGif, setRandomGif] = useState(null);
 
     const handleClickLink = () => {
+        window.open(links[currentIndexLink].url);
+
         const nextIndex = currentIndexLink + 1;
+
         if (nextIndex <= links.length - 1) {
             setCurrentIndexLink(nextIndex)
         } else {
@@ -56,29 +58,48 @@ export const Links = () => {
         }
     }
 
+    useEffect(() => {
+        getRandomGif()
+    }, []);
+
+    const getGif = async () => {
+        const randomGifResponse = await fetch(`https://api.giphy.com/v1/randomid?api_key=${GIPHY_API_KEY}`);
+        const { data: { random_id } } = await randomGifResponse.json();
+
+        const giphyApiSearchUrl = `https://api.giphy.com/v1/gifs/search?random_id=${random_id}&api_key=${GIPHY_API_KEY}&q=congratulations&limit=1&offset=0&rating=g&lang=es&bundle=messaging_non_clips`;
+        const response = await fetch(giphyApiSearchUrl);
+        const { data: [{ images: { original: { url }} }]} = await response.json();
+
+        console.log(url);
+        setRandomGif(url)
+    }
+
+    const getRandomGif = async () => {
+
+        const randomGifResponse = await fetch(`https://api.giphy.com/v1/randomid?api_key=${GIPHY_API_KEY}`);
+        const { data: { random_id } } = await randomGifResponse.json();
+
+        if (random_id) {
+            const getGifResponse = await fetch(`https://api.giphy.com/v1/gifs/random?random_id=${random_id}&api_key=${GIPHY_API_KEY}&tag=congratulations`);
+            const { data: { images: { original: { url }} }} = await getGifResponse.json();
+            console.log(url);
+            setRandomGif(url)
+        }
+    }
+
     return (
         <div className="links-container">
                 {!complete &&
-                    <a className="link" href={links[currentIndexLink].url} target='_blank' rel="noreferrer" onClick={handleClickLink}>
+                    <div className="link" onClick={handleClickLink}>
                         {links[currentIndexLink].icon && <img src={links[currentIndexLink].icon} alt={links[currentIndexLink].name} />}
                         <p>{links[currentIndexLink].name}</p>
-                    </a>
-                }
-                {
-                    complete && <div className="link-complete">
-                        <img src="https://media1.tenor.com/m/Bysws45JqI8AAAAC/congratulations-congrats.gif" alt="gif" />
                     </div>
                 }
-{/*
-            {links.map((link, index) => (
-                <div key={`link-${index}-${link.name}`} className="link">
-                    <a href={link.url} target='_blank' rel="noreferrer">
-                        {link.icon && <img src={link.icon} alt={link.name} />}
-                        <p>{link.name}</p>
-                    </a>
-                    <div className="spacer" />
-                </div>
-            ))} */}
+                {
+                    complete && randomGif && <div className="link-complete">
+                        <img src={randomGif} alt="gif" />
+                    </div>
+                }
         </div>
     )
 }
