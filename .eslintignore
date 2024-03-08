@@ -1,0 +1,6 @@
+/src/app/graphql/index.ts
+/docker/**
+
+/dist/**
+/node_modules/**
+/apollo.config.js
