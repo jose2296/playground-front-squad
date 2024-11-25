@@ -9,6 +9,7 @@ import App from './App';
 import { Golf } from './Golf/Golf';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import Game from './Game/Game';
 const DailyV2 = lazy(() => import('./daily-v2/DailyV2'));
 
 const router = createBrowserRouter([
@@ -21,6 +22,14 @@ const router = createBrowserRouter([
     element: (
       <div className="App">
           <DailyV2 />
+      </div>
+    )
+  },
+  {
+    path: "/game",
+    element: (
+      <div className="App">
+          <Game />
       </div>
     )
   },
