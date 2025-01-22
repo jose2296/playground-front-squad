@@ -10,6 +10,7 @@ import { Golf } from './Golf/Golf';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Game from './Game/Game';
+import GolfV2 from './golfv2/Golf-v2';
 const DailyV2 = lazy(() => import('./daily-v2/DailyV2'));
 
 const router = createBrowserRouter([
@@ -34,7 +35,11 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: "golf",
+    path: 'golf',
+    element: <GolfV2 />,
+  },
+  {
+    path: "golf-old",
     element: <Golf />,
   },
 ]);
