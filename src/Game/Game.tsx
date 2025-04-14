@@ -3,8 +3,6 @@ import { child, get, getDatabase, onValue, ref, set } from 'firebase/database'
 import { initializeApp } from 'firebase/app'
 import { useEffect, useState } from 'react';
 
-console.log(process.env.REACT_APP_FIREBASE_API_KEY);
-
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: "playground-front-squad.firebaseapp.com",
@@ -81,8 +79,8 @@ const Game = () => {
     }
 
     return (
-        <div className="container">
-            <iframe src="/build/index.html" width={'500px'} height={'900px'} />
+        <div className="game-container">
+            <iframe src="/game-build/index.html" width={'500px'} height={'900px'} />
             <div className="score-container">
                 <h1>{ month }</h1>
 
@@ -93,8 +91,9 @@ const Game = () => {
                     {summary.sort((a, b) => a.score < b.score ? 1 : -1).map((user, index) => (
                         <div className="user" key={user.name}>
                             <div className="name">
-                                {index + 1} - {user.name}
-                                <div className="color" style={{ backgroundColor: user.color }}></div>
+                                {index + 1}
+                                <div className="color" style={{ backgroundColor: `#${user.color}` }}></div>
+                                {user.name}
                             </div>
                             <div className="score">{user.score}</div>
                         </div>

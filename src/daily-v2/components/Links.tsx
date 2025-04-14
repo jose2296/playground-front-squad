@@ -5,7 +5,7 @@ const links = [
     {
         name: 'Wordle (ES)',
         url: 'https://lapalabradeldia.com',
-        icon: 'https://lapalabradeldia.com/favicon.ico'
+        icon: 'https://wordly.org/favicon-32x32.png'
     },
     {
         name: 'Wordle (EN)',

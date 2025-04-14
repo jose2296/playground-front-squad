@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import './DailyV2.sass';
 import { Links } from './components/Links';
+import Game from '../Game/Game';
 
 interface Link {
     name: string;
@@ -151,93 +152,100 @@ const DailyV2 = () => {
                     <div className="title">
                         <span>{currentStep.name}</span>
                     </div>
-                    {currentStep.name === 'Daily' && <div className="daily">
-
-                        <div className="buttons">
-                            <button className="button" onClick={start}>
-                                <span>Shuffle</span>
-                            </button>
-                            <button className="button" onClick={openConfig}>
-                                <span>Config users</span>
-                            </button>
-
-                            {/* TODO: CONDIF Links <button className="button" onClick={openConfig}>
-                                <span>Config Links</span>
-                            </button> */}
-
-                            { configUsers &&
-                                <div className="config-users">
-                                    <div className="users">
-                                        { usersForm.map(((userValue, index) => (
-                                            <div className="user" key={`config-user-${index}`}>
-                                                <input value={userValue} onChange={(e) => updateUser(e.target.value, index)} />
-                                                <button className="button small" onClick={() => removeUser(index)}>
-                                                    <span>-</span>
-                                                </button>
-                                            </div>
-                                        ))) }
-                                    </div>
-
-                                    <div className="config-buttons">
-                                        <button className="button small" onClick={addNewUser}>
-                                            <span>+</span>
-                                        </button>
-
-                                        <button className="button" onClick={saveUsers}>
-                                            <span>Save</span>
-                                        </button>
-
-                                    </div>
-                                </div>
-                            }
-                        </div>
-
-                        <div className="cards">
-                            { cards.map((_, index) =>
-                                <div
-                                    onClick={start}
-                                    className={state === 'shuffling' ? 'card flip animate' : 'card flip'}
-                                    style={{
-                                        left: 50 + -(index * 1) + 'px',
-                                        top: 40 + -(index * 1) + 'px',
-                                        animationDelay: -(index * 0.25) + ((cards.length - 1) * 0.25) + 's',
-                                    }}
-                                    key={`card-${index}`}
-                                >
-                                    <div className="inner">
-                                        <div className="front">
-                                            <div className="text"></div>
-                                        </div>
-                                        <div className="back"></div>
-                                    </div>
-                                </div>
-                            )}
-                            { state === 'shuffled' &&
-                                users.map((user, index) => (
-                                    <div
-                                        className={dropState === 'distributed' ? 'card' : 'card flip-reverse'}
-                                        key={`user-card-${user}`}
-                                        style={{
-                                            left: (dropState === 'dealing' || dropState === 'distributed') ? (400 + -(cards.length -1)) + (index * 200) + 'px' : 50 + -((cards.length -1) * 1) + 'px',
-                                            top: 40 + -((cards.length -1) * 1) + 'px',
-                                            transitionDelay: -(index * 0.25) + ((users.length - 1) * 0.25) + 's',
-                                        }}
-                                    >
-                                        <div className="inner"
-                                            style={{
-                                                transitionDelay: -(index * 0.75) + ((users.length - 1) * 0.75) + 's',
-                                            }}
-                                        >
-                                            <div className="front">
-                                                <div className="text">{user}</div>
-                                            </div>
-                                            <div className="back"></div>
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                        </div>
+                    {currentStep.name === 'Daily' && <div className="daily-game ">
+                        <Game />
                     </div>
+                    }
+
+                    {/* TODO: ALL DAILY CARD */}
+                    {
+                    // currentStep.name === 'Daily' && <div className="daily">
+
+                    //     <div className="buttons">
+                    //         <button className="button" onClick={start}>
+                    //             <span>Shuffle</span>
+                    //         </button>
+                    //         <button className="button" onClick={openConfig}>
+                    //             <span>Config users</span>
+                    //         </button>
+
+                    //         {/* TODO: CONDIF Links <button className="button" onClick={openConfig}>
+                    //             <span>Config Links</span>
+                    //         </button> */}
+
+                    //         { configUsers &&
+                    //             <div className="config-users">
+                    //                 <div className="users">
+                    //                     { usersForm.map(((userValue, index) => (
+                    //                         <div className="user" key={`config-user-${index}`}>
+                    //                             <input value={userValue} onChange={(e) => updateUser(e.target.value, index)} />
+                    //                             <button className="button small" onClick={() => removeUser(index)}>
+                    //                                 <span>-</span>
+                    //                             </button>
+                    //                         </div>
+                    //                     ))) }
+                    //                 </div>
+
+                    //                 <div className="config-buttons">
+                    //                     <button className="button small" onClick={addNewUser}>
+                    //                         <span>+</span>
+                    //                     </button>
+
+                    //                     <button className="button" onClick={saveUsers}>
+                    //                         <span>Save</span>
+                    //                     </button>
+
+                    //                 </div>
+                    //             </div>
+                    //         }
+                    //     </div>
+
+                    //     <div className="cards">
+                    //         { cards.map((_, index) =>
+                    //             <div
+                    //                 onClick={start}
+                    //                 className={state === 'shuffling' ? 'card flip animate' : 'card flip'}
+                    //                 style={{
+                    //                     left: 50 + -(index * 1) + 'px',
+                    //                     top: 40 + -(index * 1) + 'px',
+                    //                     animationDelay: -(index * 0.25) + ((cards.length - 1) * 0.25) + 's',
+                    //                 }}
+                    //                 key={`card-${index}`}
+                    //             >
+                    //                 <div className="inner">
+                    //                     <div className="front">
+                    //                         <div className="text"></div>
+                    //                     </div>
+                    //                     <div className="back"></div>
+                    //                 </div>
+                    //             </div>
+                    //         )}
+                    //         { state === 'shuffled' &&
+                    //             users.map((user, index) => (
+                    //                 <div
+                    //                     className={dropState === 'distributed' ? 'card' : 'card flip-reverse'}
+                    //                     key={`user-card-${user}`}
+                    //                     style={{
+                    //                         left: (dropState === 'dealing' || dropState === 'distributed') ? (400 + -(cards.length -1)) + (index * 200) + 'px' : 50 + -((cards.length -1) * 1) + 'px',
+                    //                         top: 40 + -((cards.length -1) * 1) + 'px',
+                    //                         transitionDelay: -(index * 0.25) + ((users.length - 1) * 0.25) + 's',
+                    //                     }}
+                    //                 >
+                    //                     <div className="inner"
+                    //                         style={{
+                    //                             transitionDelay: -(index * 0.75) + ((users.length - 1) * 0.75) + 's',
+                    //                         }}
+                    //                     >
+                    //                         <div className="front">
+                    //                             <div className="text">{user}</div>
+                    //                         </div>
+                    //                         <div className="back"></div>
+                    //                     </div>
+                    //                 </div>
+                    //             ))
+                    //         }
+                    //     </div>
+                    // </div>
                     }
 
                     {currentStep.name === 'Games' && <div className="daily-links">
