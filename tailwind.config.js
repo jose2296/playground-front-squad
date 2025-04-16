@@ -1,5 +1,5 @@
 import tailwindcssTypography from '@tailwindcss/typography';
-import daisyui from 'daisyui';
+// import daisyui from 'daisyui';
 
 /** @type {import('tailwindcss').Config} */
 const a = {
@@ -7,11 +7,11 @@ const a = {
         './src/**/*.{js,ts,jsx,tsx}',
     ],
     plugins: [
-        daisyui,
+        // daisyui,
         tailwindcssTypography
     ],
-    daisyui: {
-        themes: ['dracula'],
-    },
+    // daisyui: {
+    //     themes: ['dracula'],
+    // },
 };
 export default a;

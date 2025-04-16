@@ -1,0 +1,147 @@
+{
+    "games": [
+        {
+            "name": "Las Bolas locas",
+            "slug": "balls",
+            "modifiersActivated": true,
+            "modes": [
+                {
+                    "name": "Classic",
+                    "slug": "classic",
+                    "active": true
+                },
+                {
+                    "name": "Anonymous",
+                    "slug": "anonymous",
+                    "active": false
+                },
+                {
+                    "name": "Pinball",
+                    "slug": "pinball",
+                    "active": false
+                },
+                {
+                    "name": "Smallville",
+                    "slug": "smallville",
+                    "active": true
+                },
+                {
+                    "name": "Smallville random",
+                    "slug": "smallville-random",
+                    "active": true
+                },
+                {
+                    "name": "Mario Kart",
+                    "slug": "mario-kart",
+                    "active": false
+                },
+                {
+                    "name": "Route 66",
+                    "slug": "route-66",
+                    "active": false
+                },
+                {
+                    "name": "Demolición",
+                    "slug": "demolition",
+                    "active": false
+                },
+                {
+                    "name": "Piruliii",
+                    "slug": "piruli",
+                    "active": false
+                },
+                {
+                    "name": "Totem",
+                    "slug": "totem",
+                    "active": false
+                },
+                {
+                    "name": "Handicap",
+                    "slug": "handicap",
+                    "active": false
+                },
+                {
+                    "name": "El club de la lucha",
+                    "slug": "fight-club",
+                    "active": false
+                }
+            ]
+        },
+        {
+            "name": "Cards",
+            "slug": "cards",
+            "modifiersActivated": false,
+            "modes": [
+                {
+                    "name": "Classic",
+                    "slug": "classic",
+                    "active": true
+                },
+                {
+                    "name": "Sandro Rey",
+                    "slug": "sandro-rey",
+                    "active": false
+                },
+                {
+                    "name": "Pescapatos",
+                    "slug": "pescapatos",
+                    "active": false
+                }
+            ]
+        }
+    ],
+    "modifiers": [
+        {
+            "name": "Normal",
+            "slug": "normal",
+            "active": true,
+            "weight": 0.6
+        },
+        {
+            "name": "Puntos invertidos",
+            "slug": "inverted-points",
+            "active": true,
+            "weight": 0.1333
+        },
+        {
+            "name": "Puntos random",
+            "slug": "random-points",
+            "active": true,
+            "weight": 0.1333
+        },
+        {
+            "name": "Puntos random por posición",
+            "slug": "random-position-points",
+            "active": true,
+            "weight": 0.1333
+        },
+        {
+            "name": "Puntos random invertidos por posición",
+            "slug": "random-inverted-position-points",
+            "active": true,
+            "weight": 0.1333
+        }
+    ],
+    "events": [
+        {
+            "name": "Tonto el último",
+            "slug": "tonto-el-ultimo",
+            "active": false
+        },
+        {
+            "name": "Cero patatero",
+            "slug": "cero-patatero",
+            "active": false
+        },
+        {
+            "name": "Enpujoncito",
+            "slug": "enpujoncito",
+            "active": false
+        },
+        {
+            "name": "Puntos random",
+            "slug": "random-points",
+            "active": false
+        }
+    ]
+}
