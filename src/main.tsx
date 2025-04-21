@@ -13,6 +13,7 @@ import DailyGame from './modules/Daily/Game/DailyGame';
 import DailyRoulette from './modules/Daily/Roulette/Roulette';
 import InternationalDay from './modules/InternationalDay';
 import { useStore } from './store';
+import Daily from './modules/Daily/Daily';
 
 export interface HOCFunctions { 
     nextStep?: () => void;
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'daily',
-                element: <HOC Component={(({ previousStep, nextStep }: HOCFunctions) => <Outlet context={{ previousStep, nextStep }} />) as any} index={1} />,
+                element: <HOC Component={Daily as any} index={1} />,
                 children: [
                     {
                         path: '',

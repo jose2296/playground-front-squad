@@ -110,9 +110,9 @@ const DailyRoulette = () => {
             modifier: item.type?.modifiersActivated ? getRandomOptionByNumberKey(modifiers, 'weight') : undefined,
             event: Math.random() > 0.8 ? rouletteData.events[eventIndex] : undefined
         }));
-        console.log(newItems);
         
-        setItems([{ name: 'empty', slug: 'empty', index: -1 }, { name: 'empty', slug: 'empty', index: -1 }, ...newItems]);
+        setItems(newItems);
+        // setItems([{ name: 'empty', slug: 'empty', index: -1 }, { name: 'empty', slug: 'empty', index: -1 }, ...newItems]);
     };
 
     const calculateWinningItem = () => {
@@ -121,7 +121,6 @@ const DailyRoulette = () => {
             ...items[randomIndex],
             translateXOffset: -(randomIndex * ITEM_WIDTH) + (ITEM_WIDTH * 2) - (Math.floor(Math.random() * ITEM_WIDTH / 3) * (Math.random() > 0.5 ? -1 : 1)),
         };
-        console.log(winningItem);
 
         setSelectedItem(winningItem);
     };
@@ -144,12 +143,17 @@ const DailyRoulette = () => {
                 </div>
             }
 
-            {/* Start Button */}
+            {/* Start/go to game Button */}
             <div className='m-10'>
-                <button className='btn btn-primary btn-xl' onClick={spinRoulette} disabled={isSpinning}>
-                    Start
-                    {isSpinning && <span className="loading loading-spinner"></span>}
-                </button>
+                {(!selectedItem || isSpinning) &&
+                    <button className='btn btn-primary btn-xl' onClick={spinRoulette} disabled={isSpinning}>
+                        Start
+                        {isSpinning && <span className="loading loading-spinner"></span>}
+                    </button>
+                }
+                {!isSpinning && selectedItem && 
+                    <Link to={`/daily/${selectedItem?.slug}`} className='btn btn-primary btn-xl'>Go to game</Link>
+                }
             </div>
 
             {/* Result modal */}
@@ -174,9 +178,9 @@ const DailyRoulette = () => {
                         </form>
                     </div>
                 </div>
-                {/* <form method="dialog" className="modal-backdrop">
+                <form method="dialog" className="modal-backdrop">
                     <button>close</button>
-                </form> */}
+                </form>
             </dialog>
         </div>
     );
