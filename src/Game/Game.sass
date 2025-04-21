@@ -1,0 +1,47 @@
+.game-container
+    display: flex
+    flex-direction: row
+    justify-content: center
+    gap: 50px
+
+    iframe
+        outline: none
+        border: 0
+        border-radius: 10px
+        transform: scale(0.8)
+    .score-container
+        padding-top: 50px
+        align-self: stretch
+        color: white
+        background: #000000b3
+        height: fit-content
+        padding: 20px
+        border-radius: 15px
+        margin-top: 90px
+        h1
+            color: white
+            border-bottom: 2px solid white
+            margin-bottom: 20px
+        .users
+            display: flex
+            flex-direction: column
+            .user
+                display: flex
+                align-items: center
+                gap: 10px
+                font-size: 22px
+                padding: 10px 0
+                &:not(:last-child)
+                    border-bottom: 1px dashed white
+                .name
+                    display: flex
+                    align-items: center
+                    gap: 10px
+                    text-align: left
+                    min-width: 180px
+                .color
+                    border-radius: 50%
+                    width: 25px
+                    height: 25px
+                .score
+                    flex: 1

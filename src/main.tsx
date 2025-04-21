@@ -1,20 +1,68 @@
-import React from 'react';
+import React, { LazyExoticComponent, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import {
     createBrowserRouter,
+    Navigate,
+    Outlet,
     RouterProvider,
 } from 'react-router-dom';
 import './index.css';
-import Daily from './modules/Daily';
+import Layout from './Layout';
+import { Links } from './modules/components/Links';
+import DailyGame from './modules/Daily/Game/DailyGame';
+import DailyRoulette from './modules/Daily/Roulette/Roulette';
+import InternationalDay from './modules/InternationalDay';
+import { useStore } from './store';
+
+export interface HOCFunctions { 
+    nextStep?: () => void;
+    previousStep?: () => void;
+};
+
+const HOC = ({ Component, index }: { Component: LazyExoticComponent<({ nextStep, previousStep }: HOCFunctions) => JSX.Element>; index: number }) => {
+    const { changeStepByIndex, nextStep, previousStep } = useStore();
+    
+    useEffect(() => {
+        changeStepByIndex(index);
+    }, [Component]);
+
+    return (
+        <Component nextStep={nextStep} previousStep={previousStep} />
+    )
+};
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <div>Hello world!</div>,
-    },
-    {
-        path: '/v2',
-        element: <Daily />
+        element: <Layout />,
+        children: [
+            {
+                path: '',
+                element: <Navigate to="/games" />
+            },
+            {
+                path: 'games',
+                element: <HOC Component={Links as any} index={0} />
+            },
+            {
+                path: 'daily',
+                element: <HOC Component={(({ previousStep, nextStep }: HOCFunctions) => <Outlet context={{ previousStep, nextStep }} />) as any} index={1} />,
+                children: [
+                    {
+                        path: '',
+                        element: <DailyRoulette />,
+                    },
+                    {
+                        path: ':game',
+                        element: <DailyGame />
+                    }
+                ]
+            },
+            {
+                path: 'international-day',
+                element: <HOC Component={InternationalDay    as any} index={2} />,
+            }
+        ]
     },
 ]);
 

@@ -1,3 +1,4 @@
+import { HOCFunctions } from '@/main';
 import { useEffect, useState } from 'react';
 
 const LINKS = [
@@ -47,7 +48,7 @@ const LINKS = [
 
 const GIPHY_API_KEY = 'lKqBhAgeKOGx2rJveh7LZJpvgRUpz8ss';
 
-export const Links = ({ handleNext }: { handleNext: () => void}) => {
+export const Links = ({ nextStep }: HOCFunctions) => {
     const [complete, setComplete] = useState(false);
     const [randomGif, setRandomGif] = useState(null);
     const [links, setLinks] = useState(LINKS);
@@ -91,7 +92,6 @@ export const Links = ({ handleNext }: { handleNext: () => void}) => {
         if (random_id) {
             const getGifResponse = await fetch(`https://api.giphy.com/v1/gifs/random?random_id=${random_id}&api_key=${GIPHY_API_KEY}&tag=congratulations`);
             const { data: { images: { original: { url }} }} = await getGifResponse.json();
-            console.log(url);
             setRandomGif(url);
         }
     };
@@ -115,7 +115,7 @@ export const Links = ({ handleNext }: { handleNext: () => void}) => {
                     </div>
 
                     <div className='text-center'>
-                        <button className='btn btn-primary px-14' onClick={handleNext}>Next</button>
+                        <button className='btn btn-primary px-14' onClick={nextStep}>Next</button>
                     </div>
                 </div>
             }
