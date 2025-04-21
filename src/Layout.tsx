@@ -14,7 +14,7 @@ const Layout = () => {
         <div className='flex flex-col h-screen py-8'>
             <main className='flex-1 flex flex-col'>
                 <div className='prose max-w-[100%] flex justify-center'>
-                    <h1 className='text-primary border-b-4 border-primary rounded'>{currentStep.name}</h1>
+                    <h1 className='text-primary border-b-4 border-primary rounded-sm'>{currentStep.name}</h1>
                 </div>
 
                 <Outlet />

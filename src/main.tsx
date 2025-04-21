@@ -9,11 +9,10 @@ import {
 import './index.css';
 import Layout from './Layout';
 import { Links } from './modules/components/Links';
-import { useStore } from './store';
-import Daily from './modules/Daily';
+import DailyGame from './modules/Daily/Game/DailyGame';
+import DailyRoulette from './modules/Daily/Roulette/Roulette';
 import InternationalDay from './modules/InternationalDay';
-import Roulette from './modules/Daily/Roulette';
-import DailyGame from './modules/Daily/DailyGame';
+import { useStore } from './store';
 
 export interface HOCFunctions { 
     nextStep?: () => void;
@@ -51,7 +50,7 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: '',
-                        element: <Roulette />,
+                        element: <DailyRoulette />,
                     },
                     {
                         path: ':game',

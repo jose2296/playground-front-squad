@@ -9321,7 +9321,7 @@ var GodotDisplayVK = {
     input_cb(c_str, elem.selectionEnd);
     GodotRuntime.free(c_str);
    }, false);
-   GodotEventListeners.add(elem, "blur", function(evt) {
+   GodotEventListeners.add(elem, "blur-sm", function(evt) {
     elem.style.display = "none";
     elem.readonly = true;
     elem.disabled = true;
@@ -9596,7 +9596,7 @@ function _godot_js_display_notification_cb(callback, p_enter, p_exit, p_in, p_ou
  const canvas = GodotConfig.canvas;
  const func = GodotRuntime.get_func(callback);
  const notif = [ p_enter, p_exit, p_in, p_out ];
- [ "mouseover", "mouseleave", "focus", "blur" ].forEach(function(evt_name, idx) {
+ [ "mouseover", "mouseleave", "focus", "blur-sm" ].forEach(function(evt_name, idx) {
   GodotEventListeners.add(canvas, evt_name, function() {
    func(notif[idx]);
   }, true);
@@ -9700,7 +9700,7 @@ function _godot_js_display_vk_show(p_text, p_type, p_start, p_end) {
 function _godot_js_display_window_blur_cb(callback) {
  if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(87, 1, callback);
  const func = GodotRuntime.get_func(callback);
- GodotEventListeners.add(window, "blur", function() {
+ GodotEventListeners.add(window, "blur-sm", function() {
   func();
  }, false);
 }

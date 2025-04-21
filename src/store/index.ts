@@ -1,4 +1,4 @@
-import { Item } from '@/modules/Daily/Roulette';
+import { Item } from '@/modules/Daily/Roulette/Roulette';
 import { create } from 'zustand';
 
 const steps = [
@@ -45,10 +45,10 @@ export const useStore = create<State>()((set) => ({
 
 
 interface RouletteState {
-    item: Item | null;
-    setItem: (item: Item) => void;
+    selectedItem: Item | null;
+    setSelectedItem: (item: Item) => void;
 }
 export const useRouletteStore = create<RouletteState>()((set) => ({
-    item: null,
-    setItem: (item) => set(() => ({ item })),
+    selectedItem: null,
+    setSelectedItem: (item) => set(() => ({ selectedItem: item })),
 }))

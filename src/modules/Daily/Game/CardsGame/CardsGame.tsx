@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import './Cards.sass';
-import { Item } from './Roulette';
+import './CardsGame.sass';
+import { Item } from '../../Roulette/Roulette';
 
 const Cards = ({ mode, modifier }: { mode: string; modifier: Item['modifier']}) => {
     console.log(mode, modifier);

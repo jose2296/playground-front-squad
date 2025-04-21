@@ -2,11 +2,11 @@ import { HOCFunctions } from "@/main";
 import { useRouletteStore } from "@/store";
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import Cards from "./Cards";
+import Cards from "./CardsGame/CardsGame";
 
 const DailyGame = () => {
     const { previousStep, nextStep } = useOutletContext<HOCFunctions>();
-    const { item } = useRouletteStore();
+    const { selectedItem: item } = useRouletteStore();
     const [gameIframeSrc, setGameIframeSrc]= useState<string | null>(null);
 
     useEffect(() => {
@@ -33,6 +33,7 @@ const DailyGame = () => {
                     <Cards mode={item.slug} modifier={item.modifier} />
                 }
             </div>
+            <button onClick={previousStep}>Previous</button>
             <button onClick={nextStep}>NEXT</button>
         </div>
     );
