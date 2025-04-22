@@ -1,17 +1,18 @@
 export const getRandomOptionByNumberKey = <T>(options: T[], key: keyof T): T => {
     const total = options.reduce((sum, opc) => sum + (opc[key] as number), 0);
     let random = Math.random() * total;
-    
+
     for (const opc of options) {
         if (random < (opc[key] as number)) {
-            return opc
-        };
+            return opc;
+        }
         random -= (opc[key] as number);
     }
 
     return options[0];
 };
 
+// Algorithm Fisher-Yates
 export const shuffleItems = <T>(array: T[]): T[] => {
     const shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -25,7 +26,7 @@ export const shuffleItems = <T>(array: T[]): T[] => {
 
 export const groupBy = (array: any[], key: string): {} => {
     return array.reduce(function(acc, item) {
-      (acc[item[key]] = acc[item[key]] || []).push(item);
-      return acc;
+        (acc[item[key]] = acc[item[key]] || []).push(item);
+        return acc;
     }, {});
 };

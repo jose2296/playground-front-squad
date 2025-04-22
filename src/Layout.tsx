@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react';
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import { useStore } from './store';
 
 const Layout = () => {
     const { steps, currentStep } = useStore();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     // useEffect(() => {
     //     navigate(currentStep.route);
     // }, [currentStep]);
-    
+
     return (
         <div className='flex flex-col h-screen py-8'>
             <main className='flex-1 flex flex-col'>
@@ -20,7 +19,7 @@ const Layout = () => {
                 <Outlet />
             </main>
 
-            <div className='divider divider-primary' />
+            <div className='divider divider-primary m-0' />
 
             <ul className='steps steps-horizontal flex justify-center'>
                 {

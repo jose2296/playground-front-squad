@@ -1,11 +1,13 @@
 import { ChangeEvent, useEffect, useState } from 'react';
+import { FaTimes } from 'react-icons/fa';
 
 interface Props {
     handleModalState: (state: 'showModal' | 'close') => void
+    updateUsers: (users: { name: string; flipped: boolean; }[]) => void
 }
 
-const ConfigurationModal = ({ handleModalState }: Props) => {
-    const [usersForm, setUsersForm] = useState<string[]>([]);
+const ConfigurationModal = ({ handleModalState, updateUsers }: Props) => {
+    const [usersForm, setUsersForm] = useState<{ name: string; flipped: boolean; }[]>([]);
 
     useEffect(() => {
         getUsersFromLocalStorage();
@@ -22,11 +24,18 @@ const ConfigurationModal = ({ handleModalState }: Props) => {
         localStorage.setItem('users', JSON.stringify(usersForm));
 
         handleModalState('close');
+        updateUsers(usersForm);
+    };
+
+    const removeUser = (index: number) => {
+        const _users = [...usersForm];
+        _users.splice(index, 1);
+        setUsersForm([..._users]);
     };
 
     const changeUserName = (event: ChangeEvent<HTMLInputElement>, index: number) => {
         const _userForm = [...usersForm];
-        _userForm[index] = event.target.value;
+        _userForm[index].name = event.target.value;
         setUsersForm([..._userForm]);
     };
 
@@ -35,9 +44,9 @@ const ConfigurationModal = ({ handleModalState }: Props) => {
             {/* CONFIG USERS MODAL */}
             <dialog id='usersModal' className='modal'>
                 <div className='modal-box'>
-                    <h3 className='font-bold text-lg flex items-center'>
+                    <h3 className='font-bold text-lg flex items-center gap-x-4'>
                         Configures the users
-                        <button className='btn btn-circle btn-xs btn-outline ml-4 mt-4' onClick={() => setUsersForm([...usersForm, ''])}>
+                        <button className='btn btn-circle btn-xs btn-outline' onClick={() => setUsersForm([...usersForm, { name: '', flipped: false }])}>
                             <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-4 h-4'>
                                 <path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
                             </svg>
@@ -48,7 +57,10 @@ const ConfigurationModal = ({ handleModalState }: Props) => {
                         {usersForm && usersForm.map((user, index) => (
                             <label key={`${user}-${index}-user`} className='input input-bordered flex items-center gap-2 w-[48%]'>
                                 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='currentColor' className='w-4 h-4 opacity-70'><path d='M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z' /></svg>
-                                <input type='text' className='grow w-full' placeholder='Username' defaultValue={user} onBlur={(e) => changeUserName(e, index)}/>
+                                <input type='text' className='grow w-full' placeholder='Username' defaultValue={user.name} onBlur={(e) => changeUserName(e, index)}/>
+                                <button className='btn btn-circle btn-xs btn-outline' onClick={() => removeUser(index)}>
+                                    <FaTimes />
+                                </button>
                             </label>
                         ))}
 

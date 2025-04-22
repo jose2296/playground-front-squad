@@ -1,6 +1,5 @@
 import { Item } from '@/modules/Daily/Roulette/Roulette';
 import { create } from 'zustand';
-import rouletteData from '@/data/roulette.json';
 
 const steps = [
     {
@@ -42,7 +41,7 @@ export const useStore = create<State>()((set) => ({
     changeStepByIndex: (index) => set(() => ({ currentStep: steps[index] })),
     nextStep: () => set((state) => ({ currentStep: steps[(state.currentStep.index + 1) % steps.length] })),
     previousStep: () => set((state) => ({ currentStep: steps[(state.currentStep.index - 1 + steps.length) % steps.length] })),
-}))
+}));
 
 
 interface RouletteState {
@@ -52,4 +51,4 @@ interface RouletteState {
 export const useRouletteStore = create<RouletteState>()((set) => ({
     selectedItem: null,
     setSelectedItem: (item) => set(() => ({ selectedItem: item })),
-}))
+}));

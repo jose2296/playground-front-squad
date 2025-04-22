@@ -71,8 +71,42 @@
   .card-content {
     @apply absolute z-10 left-[4px] top-[4px] h-[calc(100%-8px)] w-[calc(100%-8px)];
   }
+
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
 }
 
 * {
-    font-family: sans-serif;
+  font-family: sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  box-shadow: none;
+  border: 0;
+  background-color: transparent;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: none;
+  border-radius: 20px;
+  background-color: #ffffff4d;
+
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #fff;
+  transition: 1s;
+  border-radius: 20px;
+  /* border: solid 1px var(--color-secondary);; */
+  /* box-shadow: 0 4px 4px 0 rgba(112, 112, 112, 0.432); */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ffffff7c;
 }

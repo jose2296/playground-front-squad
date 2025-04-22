@@ -1,13 +1,13 @@
-import { HOCFunctions } from "@/main";
-import { useRouletteStore } from "@/store";
-import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
-import CardsGame from "./CardsGame/CardsGame";
+import { useRouletteStore } from '@/store';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import CardsGame from './CardsGame/CardsGame';
 
 const DailyGame = () => {
-    const { previousStep, nextStep } = useOutletContext<HOCFunctions>();
+    // const { previousStep, nextStep } = useOutletContext<HOCFunctions>();
     const { selectedItem } = useRouletteStore();
-    const [gameIframeSrc, setGameIframeSrc]= useState<string | null>(null);
+    const navigate = useNavigate();
+    const [gameIframeSrc, setGameIframeSrc] = useState<string | null>(null);
 
     useEffect(() => {
         if (selectedItem?.type?.slug === 'balls') {
@@ -17,15 +17,20 @@ const DailyGame = () => {
             if (selectedItem.modifier?.slug) {
                 url.searchParams.append('modifier', selectedItem.modifier.slug);
             }
-            
+
             setGameIframeSrc(url.href);
+        }
+
+        if (!selectedItem) {
+            navigate('/daily');
         }
     }, [selectedItem]);
 
+
     return (
         <div>
-            <div className="game">
-                {gameIframeSrc && 
+            <div className='game'>
+                {gameIframeSrc &&
                     <iframe src={gameIframeSrc} width={'500px'} height={'900px'} />
                 }
                 {selectedItem?.type?.slug === 'cards' &&
@@ -36,6 +41,6 @@ const DailyGame = () => {
             <button onClick={nextStep}>NEXT</button> */}
         </div>
     );
-}
+};
 
 export default DailyGame;

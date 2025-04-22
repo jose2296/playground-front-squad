@@ -1,5 +1,5 @@
+import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { motion } from "motion/react";
 
 export interface FlippingCardProps {
     flipped?: boolean;
@@ -7,7 +7,8 @@ export interface FlippingCardProps {
     frontContent: JSX.Element;
     backContent: JSX.Element;
     flippedChanged?: (flipped: boolean) => void;
-};
+}
+
 const FlippingCard = ({ flipped, frontContent, backContent, avoidFlip, flippedChanged }: FlippingCardProps) => {
     const [isFlipped, setIsFlipped] = useState(false);
 
@@ -17,46 +18,38 @@ const FlippingCard = ({ flipped, frontContent, backContent, avoidFlip, flippedCh
 
     const handleFlipCard = () => {
         if (avoidFlip) return;
-
         setIsFlipped(!isFlipped);
         flippedChanged?.(!isFlipped);
     };
 
     return (
         <div
-            className='transform-3d perspective-[1000px] cursor-pointer w-full h-full'
+            className='cursor-pointer w-full h-full perspective-1000'
             onClick={handleFlipCard}
         >
             <motion.div
-                className="w-full h-full relative transform-3d"
+                className='w-full h-full relative preserve-3d'
                 animate={{ rotateY: isFlipped ? 180 : 0 }}
                 transition={{
                     duration: 0.6,
-                    easing: [0.61, 1, 0.88, 1] // Curva personalizada
+                    easing: [0.61, 1, 0.88, 1]
                 }}
             >
                 {/* Frente de la carta */}
-                <motion.div
-                    className={`
-                        absolute w-full h-full backface-hidden
-                        flex justify-center items-center
-                        shadow-lg
-                        rotate-y-180
-                    `}
+                <div
+                    className='absolute w-full h-full backface-hidden'
+                    style={{ transform: 'rotateY(180deg)' }}
                 >
                     {frontContent}
-                </motion.div>
+                </div>
 
                 {/* Dorso de la carta */}
-                <motion.div
-                    className={`
-                        absolute w-full h-full backface-hidden
-                        flex justify-center items-center
-                        shadow-lg
-                    `}
+                <div
+                    className='absolute w-full h-full backface-hidden'
+                    style={{ transform: 'rotateY(0deg)' }}
                 >
                     {backContent}
-                </motion.div>
+                </div>
             </motion.div>
         </div>
     );
