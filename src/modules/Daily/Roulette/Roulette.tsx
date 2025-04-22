@@ -1,12 +1,15 @@
 import rouletteData from '@/data/roulette.json';
 import { useRouletteStore } from '@/store';
-import { getRandomOptionByNumberKey, shuffleItems } from '@/utils/utils';
+import { getRandomOptionByNumberKey, handleModalState, shuffleItems } from '@/utils/utils';
 import { useEffect, useRef, useState } from 'react';
+import { FaCog } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import RouletteItem, { ITEM_WIDTH } from './Roulette-item';
+import { CONFIGURATION_USERS_MODAL_ID } from '../Game/CardsGame/ConfigurationModal';
+import RouletteItem, { ROULETTE_ITEM_MARGIN, ROULETTE_ITEM_SIZE } from './Roulette-item';
 import RouletteLegend from './Roulette-legend';
 
 const ANIMATION_TIME = 5;
+const WINNING_ITEM_MODAL_ID = 'winning_item_mModal';
 
 export interface Item {
     index?: number;
@@ -47,7 +50,8 @@ const gamesData = rouletteData.games.reduce<Item[]>((acc, game) => {
 
 const DailyRoulette = () => {
     const [isSpinning, setIsSpinning] = useState(false);
-    const { selectedItem, setSelectedItem } = useRouletteStore();
+    const { setSelectedItem } = useRouletteStore();
+    const [winningItem, setWinningItem] = useState<Item>();
     const [items, setItems] = useState<Item[]>([]);
     const [showLegend, setShowLegend] = useState(true);
     const rouletteRef = useRef<HTMLDivElement>(null);
@@ -61,20 +65,19 @@ const DailyRoulette = () => {
     }, []);
 
     useEffect(() => {
-        if (isSpinning && selectedItem) {
+        if (isSpinning && winningItem) {
             if (rouletteRef.current) {
                 // - (position of winning item) + (offset of empty items) -+ (random offset of third of item width)
                 rouletteRef.current.style.transition = `transform ${ANIMATION_TIME}s cubic-bezier(0.23, 1, 0.320, 1)`;
-                rouletteRef.current.style.transform = `translateX(${selectedItem.translateXOffset}px)`;
+                rouletteRef.current.style.transform = `translateX(${winningItem.translateXOffset}px)`;
             }
 
             setTimeout(() => {
                 setIsSpinning(false);
-                (document.getElementById('winningItemModal') as HTMLDialogElement)?.showModal();
-
+                handleModalState(WINNING_ITEM_MODAL_ID, 'showModal');
             }, ANIMATION_TIME * 1000);
         }
-    }, [selectedItem]);
+    }, [winningItem]);
 
     useEffect(() => {
         if (items.length) {
@@ -120,10 +123,10 @@ const DailyRoulette = () => {
         const randomIndex = items.length - 3 - Math.floor(Math.random() * 13);
         const winningItem: Item = {
             ...items[randomIndex],
-            translateXOffset: -(randomIndex * ITEM_WIDTH) + (ITEM_WIDTH * 2) - (Math.floor(Math.random() * ITEM_WIDTH / 3) * (Math.random() > 0.5 ? -1 : 1)),
+            translateXOffset: -(randomIndex * ROULETTE_ITEM_SIZE) + (ROULETTE_ITEM_SIZE * 2) - (Math.floor(Math.random() * ROULETTE_ITEM_SIZE / 3) * (Math.random() > 0.5 ? -1 : 1)),
         };
 
-        setSelectedItem(winningItem);
+        setWinningItem(winningItem);
     };
 
     return (
@@ -134,48 +137,52 @@ const DailyRoulette = () => {
 
             {/* Roulette */}
             {!!items.length &&
-                <div className='relative w-[800px] h-[180px] overflow-hidden rounded-lg mask-r-from-90% mask-l-from-90%'>
-                    <div className='absolute left-1/2 top-1/2 h-4/5 bottom-1/2 w-0.5 bg-yellow-200 z-10 -translate-x-1/2 -translate-y-1/2' />
-                    <div ref={rouletteRef} className='flex top-2 absolute will-change-transform' style={{ transform: 'translateX(0)' }}>
+                <div style={{ height: ROULETTE_ITEM_SIZE }} className='relative w-[800px] overflow-hidden rounded-lg mask-r-from-90% mask-l-from-90%'>
+                    <div style={{ height: ROULETTE_ITEM_SIZE - ROULETTE_ITEM_MARGIN}} className='absolute left-1/2 top-1/2 bottom-1/2 w-0.5 bg-yellow-300 z-10 -translate-x-1/2 -translate-y-1/2' />
+                    <div ref={rouletteRef} className='flex absolute will-change-transform' style={{ transform: 'translateX(0)' }}>
                         {items.map((item, index) => (
-                            <RouletteItem key={`${item.slug}-${index}`} data={item} winningItem={selectedItem as Item} />
+                            <RouletteItem key={`${item.slug}-${index}`} data={item} winningItem={winningItem as Item} />
                         ))}
                     </div>
                 </div>
             }
 
             {/* Start/go to game Button */}
-            <div className='m-10'>
-                {(!selectedItem || isSpinning) &&
+            <div className='m-10 flex gap-x-10 items-center'>
+                {(!winningItem || isSpinning) &&
                     <button className='btn btn-primary btn-xl' onClick={spinRoulette} disabled={isSpinning}>
                         Start
                         {isSpinning && <span className='loading loading-spinner'></span>}
                     </button>
                 }
-                {!isSpinning && selectedItem &&
-                    <Link to={`/daily/${selectedItem?.slug}`} className='btn btn-primary btn-xl'>Go to game</Link>
+                {!isSpinning && winningItem &&
+                    <Link to={`/daily/${winningItem?.slug}`} onClick={() => setSelectedItem(winningItem)} className='btn btn-primary btn-xl'>Go to game</Link>
                 }
+
+                <button className='btn btn-secondary btn-lg btn-circle' onClick={() => handleModalState(CONFIGURATION_USERS_MODAL_ID, 'showModal')}>
+                    <FaCog />
+                </button>
             </div>
 
             {/* Result modal */}
-            <dialog id='winningItemModal' className='modal'>
+            <dialog id={WINNING_ITEM_MODAL_ID} className='modal'>
                 <div className='modal-box'>
                     <div className='flex flex-col items-center justify-center'>
-                        {selectedItem &&
+                        {winningItem &&
                             <>
-                                <RouletteItem data={selectedItem} winningItem={selectedItem}/>
-                                {selectedItem?.modifier &&
-                                        <p>Modificador: <span className='font-bold'>{selectedItem?.modifier?.name}</span></p>
+                                <RouletteItem data={winningItem} winningItem={winningItem}/>
+                                {winningItem?.modifier &&
+                                        <p>Modificador: <span className='font-bold'>{winningItem?.modifier?.name}</span></p>
                                 }
-                                {selectedItem?.event &&
-                                    <p>Event: <span className='font-bold'>{selectedItem?.event?.name}</span></p>
+                                {winningItem?.event &&
+                                    <p>Event: <span className='font-bold'>{winningItem?.event?.name}</span></p>
                                 }
                             </>
                         }
                     </div>
                     <div className='modal-action justify-center'>
                         <form method='dialog'>
-                            <Link to={`/daily/${selectedItem?.slug}`} className='btn btn-primary'>Go to game</Link>
+                            <Link to={`/daily/${winningItem?.slug}`} onClick={() => setSelectedItem(winningItem as Item)} className='btn btn-primary'>Go to game</Link>
                         </form>
                     </div>
                 </div>

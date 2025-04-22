@@ -1,28 +1,37 @@
 @import 'tailwindcss';
+
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark, dracula;
+    themes: light --default, dark --prefersdark, dracula;
 }
 
 @theme {
-  --animate-background: background-move ease infinite;
+    --animate-card-shuffle: card-shuffle .5s forwards;
 
-  @keyframes background-move {
-    0%,
-    100% {
-      background-position: 0% 50%;
+    @keyframes card-shuffle {
+        0% {
+            transform: translateX(0);
+            z-index: 3;
+        }
+
+        50% {
+            transform: translateX(20px) translateY(15px);
+            z-index: 2;
+        }
+
+        100% {
+            transform: translateX(0);
+            z-index: 1;
+        }
     }
 
-    50% {
-      background-position: 100% 50%;
-    }
-  }
-  --animate-border-spin: border-spin 2s linear infinite;
 
-  @keyframes border-spin {
-    100% {
-      transform: rotate(-360deg)
+    --animate-border-spin: border-spin 2s linear infinite;
+
+    @keyframes border-spin {
+        100% {
+            transform: rotate(-360deg)
+        }
     }
-  }
 }
 
 /*
@@ -34,79 +43,79 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
 
-   /* Act as a border */
-   .card-wrapper {
-    @apply relative overflow-hidden;
-  }
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentcolor);
+    }
 
-  /* Gradient */
-  .card-wrapper::before {
-    background: conic-gradient(
-      rgb(255, 255, 0) 0deg,
-      rgba(255, 216, 0) 0deg,
-      transparent 80deg
-    );
+    /* ----------------- Start Border animated ----------------- */
+    .item-border-animated-wrapper {
+        @apply relative overflow-hidden;
+    }
 
-    @apply absolute left-[-25%] top-[-25%] h-[150%] w-[150%] animate-border-spin content-[''];
-  }
-  .card-wrapper::after {
-    background: conic-gradient(
-      rgb(255, 255, 0) 0deg,
-      rgba(255, 216, 0) 0deg,
-      transparent 80deg
-    );
+    .item-border-animated-wrapper::before {
+        background: conic-gradient(rgb(255, 255, 0) 0deg,
+                rgba(255, 216, 0) 0deg,
+                transparent 80deg);
+        @apply absolute left-[-25%] top-[-25%] h-[150%] w-[150%] animate-border-spin content-[''];
+    }
 
-    @apply absolute left-[-25%] top-[-25%] h-[150%] w-[150%] animate-border-spin rotate-180 content-[''];
-  }
+    .item-border-animated-wrapper::after {
+        background: conic-gradient(rgb(255, 255, 0) 0deg,
+                rgba(255, 216, 0) 0deg,
+                transparent 80deg);
+        @apply absolute left-[-25%] top-[-25%] h-[150%] w-[150%] animate-border-spin rotate-180 content-[''];
+    }
 
-  /* Body */
-  .card-content {
-    @apply absolute z-10 left-[4px] top-[4px] h-[calc(100%-8px)] w-[calc(100%-8px)];
-  }
+    .item-border-animated-content {
+        @apply absolute z-10 left-[4px] top-[4px] h-[calc(100%-8px)] w-[calc(100%-8px)];
+    }
+
+    /* ----------------- End Border animated ----------------- */
 
 
-  .preserve-3d {
-    transform-style: preserve-3d;
-  }
+    .preserve-3d {
+        transform-style: preserve-3d;
+    }
+
+    .card-item {
+        @apply w-30 h-48 2xl:w-40 2xl:h-60;
+    }
 }
 
 * {
-  font-family: sans-serif;
+    font-family: sans-serif;
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-  box-shadow: none;
-  border: 0;
-  background-color: transparent;
+    width: 8px;
+    height: 8px;
+    box-shadow: none;
+    border: 0;
+    background-color: transparent;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: none;
-  border-radius: 20px;
-  background-color: #ffffff4d;
+    box-shadow: none;
+    border-radius: 20px;
+    background-color: #ffffff4d;
 
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #fff;
-  transition: 1s;
-  border-radius: 20px;
-  /* border: solid 1px var(--color-secondary);; */
-  /* box-shadow: 0 4px 4px 0 rgba(112, 112, 112, 0.432); */
+    background: #fff;
+    transition: 1s;
+    border-radius: 20px;
+    /* border: solid 1px var(--color-secondary);; */
+    /* box-shadow: 0 4px 4px 0 rgba(112, 112, 112, 0.432); */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ffffff7c;
+    background: #ffffff7c;
 }

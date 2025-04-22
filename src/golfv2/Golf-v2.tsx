@@ -5,8 +5,8 @@ const GolfV2 = () => {
         width: '100%',
         height: '100vh'
     }}>
-        <iframe src="/golf-v2/index.html" width={'100%'} height={'100%'} />
-    </div>
-}
+        <iframe src='/golf-v2/index.html' width={'100%'} height={'100%'} />
+    </div>;
+};
 
 export default GolfV2;

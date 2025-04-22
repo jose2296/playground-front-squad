@@ -1,12 +1,13 @@
+import { handleModalState } from '@/utils/utils';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 
-interface Props {
-    handleModalState: (state: 'showModal' | 'close') => void
-    updateUsers: (users: { name: string; flipped: boolean; }[]) => void
-}
+export const CONFIGURATION_USERS_MODAL_ID = 'configuration_users_modal';
 
-const ConfigurationModal = ({ handleModalState, updateUsers }: Props) => {
+interface Props {
+    updateUsers?: (users: { name: string; flipped: boolean; }[]) => void
+}
+const ConfigurationModal = ({ updateUsers }: Props) => {
     const [usersForm, setUsersForm] = useState<{ name: string; flipped: boolean; }[]>([]);
 
     useEffect(() => {
@@ -23,8 +24,8 @@ const ConfigurationModal = ({ handleModalState, updateUsers }: Props) => {
     const saveUsers = () => {
         localStorage.setItem('users', JSON.stringify(usersForm));
 
-        handleModalState('close');
-        updateUsers(usersForm);
+        handleModalState(CONFIGURATION_USERS_MODAL_ID, 'close');
+        updateUsers?.(usersForm);
     };
 
     const removeUser = (index: number) => {
@@ -42,7 +43,7 @@ const ConfigurationModal = ({ handleModalState, updateUsers }: Props) => {
     return (
         <>
             {/* CONFIG USERS MODAL */}
-            <dialog id='usersModal' className='modal'>
+            <dialog id={CONFIGURATION_USERS_MODAL_ID} className='modal'>
                 <div className='modal-box'>
                     <h3 className='font-bold text-lg flex items-center gap-x-4'>
                         Configures the users
@@ -67,7 +68,7 @@ const ConfigurationModal = ({ handleModalState, updateUsers }: Props) => {
                     </div>
 
                     <div className='modal-action'>
-                        <button className='btn' onClick={() => handleModalState('close')}>Close</button>
+                        <button className='btn' onClick={() => handleModalState(CONFIGURATION_USERS_MODAL_ID, 'close')}>Close</button>
                         <button className='btn btn-primary' onClick={saveUsers}>Save</button>
                     </div>
                 </div>

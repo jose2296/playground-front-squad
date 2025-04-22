@@ -1,8 +1,10 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { useStore } from './store';
+import { useRouletteStore, useStore } from './store';
 
 const Layout = () => {
     const { steps, currentStep } = useStore();
+    const { selectedItem } = useRouletteStore();
+
     // const navigate = useNavigate();
 
     // useEffect(() => {
@@ -10,18 +12,33 @@ const Layout = () => {
     // }, [currentStep]);
 
     return (
-        <div className='flex flex-col h-screen py-8'>
-            <main className='flex-1 flex flex-col'>
+        <div className='flex flex-col h-screen'>
+            <main className='flex-1 flex flex-col py-8 overflow-auto'>
                 <div className='prose max-w-[100%] flex justify-center'>
-                    <h1 className='text-primary border-b-4 border-primary rounded-sm'>{currentStep.name}</h1>
+                    <div className='flex flex-col items-center justify-center'>
+                        <h1 className='text-primary border-b-4 border-primary rounded-sm text-4xl w-fit'>{currentStep.name}</h1>
+
+                        {selectedItem &&
+                            <div className='flex flex-col items-center justify-center p-4'>
+                                <p className='text-center text-xl'>
+                                    {selectedItem?.type?.name} - {selectedItem?.name}
+                                    {selectedItem?.modifier && ` (${selectedItem.modifier.name})`}
+                                </p>
+                                <p>
+                                    {selectedItem?.event && <span className='text-lg'> Evento especial: <span className=' font-bold'>{selectedItem.event.name}</span></span>}
+                                </p>
+                            </div>
+                        }
+
+                    </div>
                 </div>
 
                 <Outlet />
             </main>
 
-            <div className='divider divider-primary m-0' />
+            <div className='w-full h-0.5 bg-primary mb-4' />
 
-            <ul className='steps steps-horizontal flex justify-center'>
+            <ul className='steps steps-horizontal flex justify-center p-2'>
                 {
                     steps && steps.map((step, index) => (
                         <NavLink

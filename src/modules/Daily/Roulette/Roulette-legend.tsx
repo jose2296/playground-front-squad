@@ -1,7 +1,7 @@
 import rouletteData from '@/data/roulette.json';
 import { FaInfoCircle } from 'react-icons/fa';
 import { Item } from './Roulette';
-import RouletteItem, { ITEM_WIDTH } from './Roulette-item';
+import RouletteItem, { ROULETTE_ITEM_SIZE } from './Roulette-item';
 
 const RouletteLegend = ({ gamesData }: { gamesData: Item[] }) => {
     return (
@@ -10,9 +10,9 @@ const RouletteLegend = ({ gamesData }: { gamesData: Item[] }) => {
             {gamesData?.length &&
                 <div className='flex flex-row flex-wrap items-center justify-center'>
                     {gamesData.map(game => (
-                        <div style={{ maxWidth: `${ITEM_WIDTH}px`}} className={'flex flex-col items-center justify-center relative'} key={`${game.slug}-${game.type?.slug}`}>
+                        <div style={{ maxWidth: `${ROULETTE_ITEM_SIZE}px`}} className={'flex flex-col items-center justify-center relative'} key={`${game.slug}-${game.type?.slug}`}>
                             <RouletteItem data={game} />
-                            <div style={{ maxWidth: `${ITEM_WIDTH}px`}} className='flex items-center gap-2 p-2 absolute -top-1 -right-1 z-10'>
+                            <div style={{ maxWidth: `${ROULETTE_ITEM_SIZE}px`}} className='flex items-center gap-2 p-2 absolute -top-1 -right-1 z-10'>
                                 {/* <p className={`truncate`}>{'game.description game.description game.description game.description game.description'}</p> */}
                                 <div className='w-full tooltip cursor-pointer'>
                                     <FaInfoCircle />

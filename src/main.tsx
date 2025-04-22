@@ -3,33 +3,32 @@ import ReactDOM from 'react-dom/client';
 import {
     createBrowserRouter,
     Navigate,
-    Outlet,
-    RouterProvider,
+    RouterProvider
 } from 'react-router-dom';
 import './index.css';
 import Layout from './Layout';
-import { Links } from './modules/components/Links';
+import Daily from './modules/Daily/Daily';
 import DailyGame from './modules/Daily/Game/DailyGame';
 import DailyRoulette from './modules/Daily/Roulette/Roulette';
 import InternationalDay from './modules/InternationalDay';
+import { Links } from './modules/Links';
 import { useStore } from './store';
-import Daily from './modules/Daily/Daily';
 
-export interface HOCFunctions { 
+export interface HOCFunctions {
     nextStep?: () => void;
     previousStep?: () => void;
-};
+}
 
 const HOC = ({ Component, index }: { Component: LazyExoticComponent<({ nextStep, previousStep }: HOCFunctions) => JSX.Element>; index: number }) => {
     const { changeStepByIndex, nextStep, previousStep } = useStore();
-    
+
     useEffect(() => {
         changeStepByIndex(index);
     }, [Component]);
 
     return (
         <Component nextStep={nextStep} previousStep={previousStep} />
-    )
+    );
 };
 
 const router = createBrowserRouter([
@@ -39,7 +38,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '',
-                element: <Navigate to="/games" />
+                element: <Navigate to='/games' />
             },
             {
                 path: 'games',
@@ -61,7 +60,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'international-day',
-                element: <HOC Component={InternationalDay    as any} index={2} />,
+                element: <HOC Component={InternationalDay as any} index={2} />,
             }
         ]
     },

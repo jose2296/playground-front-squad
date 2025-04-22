@@ -5,7 +5,7 @@ const LINKS = [
     {
         name: 'Wordle (ES)',
         url: 'https://lapalabradeldia.com',
-        icon: 'https://lapalabradeldia.com/favicon.ico',
+        icon: '/la-palabra-del-dia.png',
         completed: false
     },
     {
@@ -97,28 +97,30 @@ export const Links = ({ nextStep }: HOCFunctions) => {
     };
 
     return (
-        <div className='flex flex-row gap-5 h-full justify-center items-center'>
-            {!complete && links.map((link, index) => (
-                <div
-                    key={index}
-                    className={`group flex flex-col justify-center items-center cursor-pointer w-[150px] h-[150px] rounded-box border-4 bg-neutral ${link.completed ? 'border-success' : 'hover:border-primary transition-[border]'}`}
-                    onClick={() => handleClickLink(index)}
-                >
-                    {link.icon && <img className='w-[60px]' src={link.icon} alt={link.name} />}
-                    <p className={`pt-4 font-bold ${link.completed ? '' : 'group-hover:text-primary transition-[color]'}`}>{link.name}</p>
-                </div>
-            ))}
-            {
-                complete && randomGif && <div className='flex flex-col gap-8'>
-                    <div className='border-4 rounded-box border-primary'>
-                        <img className='rounded-box' src={randomGif} alt='gif' />
+        <div className='h-full flex items-center justify-center p-10'>
+            <div className='flex flex-row gap-10 h-fit flex-wrap justify-center items-center'>
+                {!complete && links.map((link, index) => (
+                    <div
+                        key={index}
+                        className={`group flex flex-col justify-center items-center cursor-pointer w-[150px] h-[150px] rounded-box border-4 bg-neutral ${link.completed ? 'border-success' : 'hover:border-primary transition-[border]'}`}
+                        onClick={() => handleClickLink(index)}
+                    >
+                        {link.icon && <img className='w-[60px]' src={link.icon} alt={link.name} />}
+                        <p className={`pt-4 font-bold ${link.completed ? '' : 'group-hover:text-primary transition-[color]'}`}>{link.name}</p>
                     </div>
+                ))}
+                {
+                    complete && randomGif && <div className='flex flex-col gap-8'>
+                        <div className='border-4 rounded-box border-primary'>
+                            <img className='rounded-box' src={randomGif} alt='gif' />
+                        </div>
 
-                    <div className='text-center'>
-                        <button className='btn btn-primary px-14' onClick={nextStep}>Next</button>
+                        <div className='text-center'>
+                            <button className='btn btn-primary px-14' onClick={nextStep}>Next</button>
+                        </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
     );
 };

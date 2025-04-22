@@ -1,6 +1,7 @@
 import { HOCFunctions } from '@/main';
 import { Outlet } from 'react-router-dom';
 import DailyScores from './DailyScores';
+import ConfigurationModal from './Game/CardsGame/ConfigurationModal';
 
 const Daily = ({ previousStep, nextStep }: HOCFunctions) => {
 
@@ -9,9 +10,12 @@ const Daily = ({ previousStep, nextStep }: HOCFunctions) => {
             <div className='flex w-3/4 justify-center'>
                 <Outlet context={{ previousStep, nextStep }} />
             </div>
-            <div className='flex w-1/4 min-w-[150px] border-l-2 items-start'>
+            <div className='flex w-1/4 min-w-[280px] border-l-2 items-start'>
                 <DailyScores />
             </div>
+
+            {/* Config modal */}
+            <ConfigurationModal />
         </div>
     );
 };

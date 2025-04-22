@@ -1,22 +1,22 @@
-import ConfigurationModal from '@/modules/components/configuration-modal';
-import { shuffleItems } from '@/utils/utils';
+import FlippingCard from '@/components/FlippingCard';
+import { getRandomRangeNumber, shuffleItems } from '@/utils/utils';
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
-import { FaCog, FaExchangeAlt } from 'react-icons/fa';
+import { FaExchangeAlt } from 'react-icons/fa';
 import { Item } from '../../Roulette/Roulette';
-import Card, { CARD_SIZE } from './Card';
-import './CardsGame.sass';
+import AnimatedCard from './AnimatedCard';
 
 const cards = [...Array(10)];
+const pointsPerUser = 10;
 
-const CardsGame = ({ mode, modifier }: { mode: string; modifier: Item['modifier'] }) => {
+const CardsGame = ({ modifier }: { mode: string; modifier: Item['modifier'] }) => {
     const [startPosition, setStartPosition] = useState<{ top: string; left: string }>();
     const [finalPositions, setFinalPositions] = useState<{ top: string; left: string }[]>([]);
     const [users, setUsers] = useState<{name: string; flipped: boolean; }[]>([]);
     const [state, setState] = useState('ready');
     const [dropState, setDropState] = useState('no-dealing');
-    const deckCardsRef = useRef<HTMLDivElement>();
-    const shuffledCardsRef = useRef<HTMLDivElement>();
+    const deckCardsRef = useRef<HTMLDivElement>(null);
+    const shuffledCardsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const localUsers = localStorage.getItem('users');
@@ -39,27 +39,27 @@ const CardsGame = ({ mode, modifier }: { mode: string; modifier: Item['modifier'
             setUsers(usersClone);
             setState('shuffled');
 
+            // setTimeout(() => {
+            setDropState('dealing');
+
+            if (shuffledCardsRef.current) {
+                const finalPositions = [...shuffledCardsRef.current.children].map(card => {
+                    const rect = card.getClientRects();
+
+                    return { left: `${rect[0].left}px`, top: `${rect[0].top}px` };
+                });
+                setFinalPositions(finalPositions);
+            }
+
             setTimeout(() => {
-                setDropState('dealing');
-
-                if (shuffledCardsRef.current) {
-                    const finalPositions = [...shuffledCardsRef.current.children].map(card => {
-                        const rect = card.getClientRects();
-
-                        return { left: `${rect[0].left}px`, top: `${rect[0].top}px` };
-                    });
-                    setFinalPositions(finalPositions);
-                }
-
-                setTimeout(() => {
-                    setDropState('distributed');
-                }, users.length * 800);
-            }, 500);
+                setDropState('distributed');
+            }, users.length * 800);
+            // }, 500);
         }, ((cards.length - 1) * 250) + 500);
     };
 
     const sendScores = () => {
-        let scores = users.map((_, index) => (index + 1) * 10);
+        let scores = users.map((_, index) => (index + 1) * pointsPerUser);
 
         if (modifier?.slug.includes('inverted')) {
             scores = scores.toReversed();
@@ -67,23 +67,19 @@ const CardsGame = ({ mode, modifier }: { mode: string; modifier: Item['modifier'
 
         switch (modifier?.slug) {
             case 'random-points':
-                scores = scores.toReversed();
+                // between 1 and users.length + pointsPerUser -> 4 users (1 - 50)
+                scores = scores.map(() => getRandomRangeNumber(1, (users.length * pointsPerUser) + pointsPerUser));
                 break;
             case 'random-position-points':
-                scores = scores.toReversed();
-
-                break;
             case 'random-inverted-position-points':
-                scores = scores.toReversed();
-
+                // between position -+ pointsPerUser -> 4 users (0 - 20, 10 - 30, 20 - 40, 30 - 50)
+                scores = scores.map((score) => getRandomRangeNumber(score - pointsPerUser, score + pointsPerUser));
                 break;
         }
 
-        console.log(users.map((user, index) => ({ ...user, score: scores[index] })));
-    };
+        const result = users.map((user, index) => ({ ...user, score: scores[index] }));
+        console.log(result);
 
-    const handleModalState = (state: 'showModal' | 'close') => {
-        (document.getElementById('usersModal') as HTMLDialogElement)[state]();
     };
 
     return (
@@ -95,47 +91,38 @@ const CardsGame = ({ mode, modifier }: { mode: string; modifier: Item['modifier'
                         <FaExchangeAlt />
                         {state === 'shuffling' && <span className='loading loading-spinner' />}
                     </button>
-                    <button className='btn btn-secondary btn-lg btn-circle' onClick={() => handleModalState('showModal')}>
-                        <FaCog />
-                    </button>
                 </div>
 
             </div>
-            <div className='flex flex-row gap-x-10 gap-y-20 p-10 flex-wrap'>
-                <div ref={deckCardsRef as any}
-                    className={clsx('flex items-center justify-center relative')}
-                    style={{
-                        width: `${CARD_SIZE.width}px`,
-                        height: `${CARD_SIZE.height}px`
-                    }}
+            <div className='flex flex-row gap-x-20 gap-y-30 p-10 flex-wrap'>
+                <div ref={deckCardsRef}
+                    className={clsx('flex items-center justify-center relative card-item')}
                 >
                     {cards.map((_, index) =>
                         <div
                             key={`card-${index}`}
-                            className={clsx('absolute', {
-                                'animate-shuffle': state === 'shuffling'
+                            className={clsx('absolute card-item', {
+                                'animate-card-shuffle': state === 'shuffling'
                             })}
                             style={{
-                                width: `${CARD_SIZE.width}px`,
-                                height: `${CARD_SIZE.height}px`,
                                 left: -(index * 1) + 'px',
                                 top: -(index * 1) + 'px',
                                 animationDelay: -(index * 0.25) + ((cards.length - 1) * 0.25) + 's',
                             }}
                             onClick={start}
                         >
-                            <Card avoidFlip={true} className='z-20' />
+                            <AnimatedCard avoidFlip={true} className='z-20' />
                         </div>
                     )}
                 </div>
-                <div>
-                    <div className='absolute-card flex gap-10 flex-wrap'>
-                        {state === 'shuffled' &&
-                            users.map((user, index) => (
+                <div className='flex flex-1'>
+                    {state === 'shuffled' && dropState !== 'distributed' &&
+                        <div className='absolute-card'>
+                            {users.map((user, index) => (
                                 <div
                                     key={`user-card-${index}-${user.name}`}
                                 >
-                                    <Card
+                                    <AnimatedCard
                                         className='z-10'
                                         avoidFlip={true}
                                         content={user.name}
@@ -146,20 +133,32 @@ const CardsGame = ({ mode, modifier }: { mode: string; modifier: Item['modifier'
                                         onCompleteAnimationTimeout={users.length * 500 - (index * 500)}
                                     />
                                 </div>
-                            ))
-                        }
-                    </div>
-                    <div ref={shuffledCardsRef as any} className='real-cards flex gap-10 flex-wrap'>
+                            ))}
+                        </div>
+                    }
+                    <div ref={shuffledCardsRef} className='real-cards flex gap-4 lg:gap-10 flex-wrap justify-center w-full'>
                         {users.length &&
                             users.map((user, index) => (
                                 <div
                                     key={`user-card-${index}-${user.name}`}
-                                    className={clsx('opacity-0')}
-                                    style={{
-                                        width: `${CARD_SIZE.width}px`,
-                                        height: `${CARD_SIZE.height}px`
-                                    }}
-                                />
+                                    className={clsx('card-item', {
+                                        'opacity-0 pointer-events-none': dropState !== 'distributed'
+                                    })}
+                                >
+                                    <FlippingCard
+                                        avoidFlip={true}
+                                        flipped={true}
+                                        frontContent={
+                                            <div className={'rounded-xl w-full h-full p-5 flex items-center justify-center border-4 border-primary-content bg-gradient-to-t from-emerald-500 via-emerald-700 to-emerald-800'}>
+                                                <h1 className='text-base-content text-2xl 2xl:text-3xl'>{user.name}</h1>
+                                            </div>
+                                        }
+                                        backContent={
+                                            <div className={'rounded-xl w-full h-full p-5 flex items-center justify-center border-4 border-primary-content bg-gradient-to-t from-purple-500 via-purple-700 to-purple-800'}
+                                            />
+                                        }
+                                    />
+                                </div>
                             ))
                         }
                     </div>
@@ -167,16 +166,11 @@ const CardsGame = ({ mode, modifier }: { mode: string; modifier: Item['modifier'
             </div>
 
             {/* Send points game Button */}
-            {dropState === 'distributed' &&
-                <div className='m-10'>
-                    <button className='btn btn-primary btn-xl' onClick={sendScores}>
-                        Send
-                    </button>
-                </div>
-            }
-
-            {/* Config modal */}
-            <ConfigurationModal handleModalState={handleModalState} updateUsers={(newUsers) => setUsers(newUsers)}/>
+            <div className='m-10 flex justify-center'>
+                <button className='btn btn-primary btn-xl' onClick={sendScores} disabled={dropState !== 'distributed'}>
+                    Send
+                </button>
+            </div>
         </div>
     );
 };
