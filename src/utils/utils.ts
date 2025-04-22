@@ -21,3 +21,11 @@ export const shuffleItems = <T>(array: T[]): T[] => {
 
     return shuffled;
 };
+
+
+export const groupBy = (array: any[], key: string): {} => {
+    return array.reduce(function(acc, item) {
+      (acc[item[key]] = acc[item[key]] || []).push(item);
+      return acc;
+    }, {});
+};

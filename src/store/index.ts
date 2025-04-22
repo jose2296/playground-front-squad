@@ -1,5 +1,6 @@
 import { Item } from '@/modules/Daily/Roulette/Roulette';
 import { create } from 'zustand';
+import rouletteData from '@/data/roulette.json';
 
 const steps = [
     {

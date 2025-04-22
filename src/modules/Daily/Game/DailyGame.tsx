@@ -2,39 +2,38 @@ import { HOCFunctions } from "@/main";
 import { useRouletteStore } from "@/store";
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import Cards from "./CardsGame/CardsGame";
+import CardsGame from "./CardsGame/CardsGame";
 
 const DailyGame = () => {
     const { previousStep, nextStep } = useOutletContext<HOCFunctions>();
-    const { selectedItem: item } = useRouletteStore();
+    const { selectedItem } = useRouletteStore();
     const [gameIframeSrc, setGameIframeSrc]= useState<string | null>(null);
 
     useEffect(() => {
-        console.log(item);
-        if (item?.type?.slug === 'balls') {
+        if (selectedItem?.type?.slug === 'balls') {
             console.log('balls');
             const url = new URL('/games/game-build/index.html', location.origin);
-            url.searchParams.append('mode', item.slug);
-            if (item.modifier?.slug) {
-                url.searchParams.append('modifier', item.modifier.slug);
+            url.searchParams.append('mode', selectedItem.slug);
+            if (selectedItem.modifier?.slug) {
+                url.searchParams.append('modifier', selectedItem.modifier.slug);
             }
             
             setGameIframeSrc(url.href);
         }
-    }, [item]);
-    
+    }, [selectedItem]);
+
     return (
         <div>
             <div className="game">
                 {gameIframeSrc && 
                     <iframe src={gameIframeSrc} width={'500px'} height={'900px'} />
                 }
-                {item?.type?.slug === 'cards' &&
-                    <Cards mode={item.slug} modifier={item.modifier} />
+                {selectedItem?.type?.slug === 'cards' &&
+                    <CardsGame mode={selectedItem.slug} modifier={selectedItem.modifier} />
                 }
             </div>
-            <button onClick={previousStep}>Previous</button>
-            <button onClick={nextStep}>NEXT</button>
+            {/* <button onClick={previousStep}>Previous</button>
+            <button onClick={nextStep}>NEXT</button> */}
         </div>
     );
 }

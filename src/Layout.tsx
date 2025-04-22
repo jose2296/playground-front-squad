@@ -6,9 +6,9 @@ const Layout = () => {
     const { steps, currentStep } = useStore();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        navigate(currentStep.route);
-    }, [currentStep]);
+    // useEffect(() => {
+    //     navigate(currentStep.route);
+    // }, [currentStep]);
     
     return (
         <div className='flex flex-col h-screen py-8'>
