@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FaExchangeAlt } from 'react-icons/fa';
 import { Item } from '../../Roulette/Roulette';
 import AnimatedCard from './AnimatedCard';
+import { BackCardContent, FrontCardContent } from './Card';
 
 const cards = [...Array(10)];
 const pointsPerUser = 10;
@@ -148,15 +149,8 @@ const CardsGame = ({ modifier }: { mode: string; modifier: Item['modifier'] }) =
                                     <FlippingCard
                                         avoidFlip={true}
                                         flipped={true}
-                                        frontContent={
-                                            <div className={'rounded-xl w-full h-full p-5 flex items-center justify-center border-4 border-primary-content bg-gradient-to-t from-emerald-500 via-emerald-700 to-emerald-800'}>
-                                                <h1 className='text-base-content text-2xl 2xl:text-3xl'>{user.name}</h1>
-                                            </div>
-                                        }
-                                        backContent={
-                                            <div className={'rounded-xl w-full h-full p-5 flex items-center justify-center border-4 border-primary-content bg-gradient-to-t from-purple-500 via-purple-700 to-purple-800'}
-                                            />
-                                        }
+                                        frontContent={<FrontCardContent content={user.name} />}
+                                        backContent={<BackCardContent />}
                                     />
                                 </div>
                             ))
