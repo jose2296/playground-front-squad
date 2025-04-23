@@ -1,8 +1,11 @@
-import { groupBy } from '@/utils/utils';
+import { useRouletteStore } from '@/store';
+import { saveTodayScores } from '@/utils/firebase';
 import { initializeApp } from 'firebase/app';
-import { child, get, getDatabase, onValue, ref, set } from 'firebase/database';
+import { getDatabase, onValue, ref } from 'firebase/database';
+import { motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import CountUp from 'react-countup';
+import RouletteItem from './Roulette/Roulette-item';
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -24,52 +27,28 @@ type Player = {
 
 const DailyScores = () => {
     const [summary, setSummary] = useState<Player[]>([]);
+    const { selectedItem } = useRouletteStore();
 
     useEffect(() => {
+        getSummaryData();
+    }, []);
+
+    const getSummaryData = () => {
         const db = getDatabase();
         const monthSummaryRef = ref(db, `scores/${month}/summary`);
         onValue(monthSummaryRef, (snapshot) => {
-            const data = snapshot.val();
+            const data: Player[] = snapshot.val();
             if (data) {
-                setSummary(data);
+                setSummary(data.sort((a, b) => a.score < b.score ? 1 : -1));
             }
         });
-    }, []);
+    };
 
     addEventListener('message', ({ data }: { data: { type: string; data: Player[] } }) => {
         if (data.type === 'finishRace') {
-            finishRace(data.data);
+            saveTodayScores(data.data);
         }
     });
-
-    const finishRace = (result: Player[]) => {
-        const db = getDatabase();
-        const today = new Date().getDate();
-        set(ref(db, `scores/${month}/${today}`), result);
-
-        get(child(ref(getDatabase()), `scores/${month}`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                const { summary, ...monthData }: { [month: string]: Player[]; summary: Player[] } = snapshot.val();
-                const users = groupBy<Player>(Object.values(monthData).flat(), 'name');
-                const summaryPerUser = Object.entries(users).reduce((acc, [userName, userDataPerDay]) => {
-                    return {
-                        ...acc,
-                        [userName]: {
-                            name: userDataPerDay?.[0].name || '',
-                            color: userDataPerDay?.[0].color || '',
-                            score: userDataPerDay?.reduce((total, day) => total + day.score, 0) || 0
-                        }
-                    };
-                }, {} as { [userName: string]: Player });
-
-                set(ref(db, `scores/${month}/summary`), Object.values(summaryPerUser));
-            } else {
-                set(ref(db, `scores/${month}/summary`), result);
-            }
-        }).catch((error) => {
-            console.error(error);
-        });
-    };
 
     return (
         <div className='flex flex-col flex-1 gap-4 items-center justify-center'>
@@ -78,18 +57,36 @@ const DailyScores = () => {
             {!summary.length &&
                 <p>No data yet.</p>
             }
+
             <div className='flex flex-col w-full px-10 gap-2'>
-                {summary.sort((a, b) => a.score < b.score ? 1 : -1).map((user, index) => (
-                    <div className='flex gap-2 text-xl justify-between' key={user.name}>
+                {summary.map((user, index) => (
+                    <motion.div layout transition={{ duration: 0.6 }} className='flex gap-2 text-xl justify-between' key={user.name}>
                         <div className='flex gap-2 items-center'>
                             {index + 1} -
                             <div className='rounded-full w-6 h-6' style={{ backgroundColor: `#${user.color}` }}></div>
                             {user.name}
                         </div>
-                        <CountUp end={user.score} duration={4} />
-                    </div>
+                        <CountUp end={user.score} duration={2} />
+                    </motion.div>
                 ))}
             </div>
+
+            {selectedItem &&
+                <div className='flex flex-col items-center justify-center p-4'>
+                    <h3 className='text-xl border-b-2'>Current game</h3>
+                    <RouletteItem data={selectedItem} />
+                    {selectedItem?.modifier &&
+                        <p>
+                            {selectedItem.modifier.name}
+                        </p>
+                    }
+                    {selectedItem?.event &&
+                        <p className='text-lg'> Evento especial:
+                            <span className=' font-bold'>{selectedItem.event.name}</span>
+                        </p>
+                    }
+                </div>
+            }
         </div>
     );
 };

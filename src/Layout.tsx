@@ -1,9 +1,8 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { useRouletteStore, useStore } from './store';
+import { useStore } from './store';
 
 const Layout = () => {
     const { steps, currentStep } = useStore();
-    const { selectedItem } = useRouletteStore();
 
     // const navigate = useNavigate();
 
@@ -17,19 +16,6 @@ const Layout = () => {
                 <div className='prose max-w-[100%] flex justify-center'>
                     <div className='flex flex-col items-center justify-center'>
                         <h1 className='text-primary border-b-4 border-primary rounded-sm text-4xl w-fit'>{currentStep.name}</h1>
-
-                        {selectedItem &&
-                            <div className='flex flex-col items-center justify-center p-4'>
-                                <p className='text-center text-xl'>
-                                    {selectedItem?.type?.name} - {selectedItem?.name}
-                                    {selectedItem?.modifier && ` (${selectedItem.modifier.name})`}
-                                </p>
-                                <p>
-                                    {selectedItem?.event && <span className='text-lg'> Evento especial: <span className=' font-bold'>{selectedItem.event.name}</span></span>}
-                                </p>
-                            </div>
-                        }
-
                     </div>
                 </div>
 

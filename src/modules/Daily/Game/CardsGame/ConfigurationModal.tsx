@@ -1,14 +1,15 @@
+import { Player } from '@/utils/firebase';
 import { handleModalState } from '@/utils/utils';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 
 export const CONFIGURATION_USERS_MODAL_ID = 'configuration_users_modal';
 
 interface Props {
-    updateUsers?: (users: { name: string; flipped: boolean; }[]) => void
+    updateUsers?: (users: Player[]) => void
 }
 const ConfigurationModal = ({ updateUsers }: Props) => {
-    const [usersForm, setUsersForm] = useState<{ name: string; flipped: boolean; }[]>([]);
+    const [usersForm, setUsersForm] = useState<Player[]>([]);
 
     useEffect(() => {
         getUsersFromLocalStorage();
@@ -34,9 +35,9 @@ const ConfigurationModal = ({ updateUsers }: Props) => {
         setUsersForm([..._users]);
     };
 
-    const changeUserName = (event: ChangeEvent<HTMLInputElement>, index: number) => {
+    const changeUserKey = (value: string, key: keyof Player, index: number) => {
         const _userForm = [...usersForm];
-        _userForm[index].name = event.target.value;
+        _userForm[index][key] = value;
         setUsersForm([..._userForm]);
     };
 
@@ -47,22 +48,25 @@ const ConfigurationModal = ({ updateUsers }: Props) => {
                 <div className='modal-box'>
                     <h3 className='font-bold text-lg flex items-center gap-x-4'>
                         Configures the users
-                        <button className='btn btn-circle btn-xs btn-outline' onClick={() => setUsersForm([...usersForm, { name: '', flipped: false }])}>
+                        <button className='btn btn-circle btn-xs btn-outline' onClick={() => setUsersForm([...usersForm, { name: '', color: '#ff0000', score: 0 }])}>
                             <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-4 h-4'>
                                 <path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
                             </svg>
                         </button>
                     </h3>
 
-                    <div className='py-4 flex flex-row flex-wrap gap-4'>
+                    <div className='py-4 flex flex-row flex-wrap gap-4 items-center'>
                         {usersForm && usersForm.map((user, index) => (
-                            <label key={`${user}-${index}-user`} className='input input-bordered flex items-center gap-2 w-[48%]'>
-                                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='currentColor' className='w-4 h-4 opacity-70'><path d='M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z' /></svg>
-                                <input type='text' className='grow w-full' placeholder='Username' defaultValue={user.name} onBlur={(e) => changeUserName(e, index)}/>
+                            <Fragment key={`${user}-${index}-user`}>
+                                <label className='input input-bordered flex items-center gap-2 w-[48%]'>
+                                    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='currentColor' className='w-4 h-4 opacity-70'><path d='M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z' /></svg>
+                                    <input type='text' className='grow w-full' placeholder='Username' defaultValue={user.name} onBlur={(e) => changeUserKey(e.target.value, 'name', index)}/>
+                                </label>
+                                <input type='color' defaultValue={user.color} onChange={(e) => changeUserKey(e.target.value, 'color', index)} />
                                 <button className='btn btn-circle btn-xs btn-outline' onClick={() => removeUser(index)}>
                                     <FaTimes />
                                 </button>
-                            </label>
+                            </Fragment>
                         ))}
 
                     </div>

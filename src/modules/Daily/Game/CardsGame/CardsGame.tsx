@@ -1,4 +1,5 @@
 import FlippingCard from '@/components/FlippingCard';
+import { Player, saveTodayScores } from '@/utils/firebase';
 import { getRandomRangeNumber, shuffleItems } from '@/utils/utils';
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
@@ -13,7 +14,7 @@ const pointsPerUser = 10;
 const CardsGame = ({ modifier }: { mode: string; modifier: Item['modifier'] }) => {
     const [startPosition, setStartPosition] = useState<{ top: string; left: string }>();
     const [finalPositions, setFinalPositions] = useState<{ top: string; left: string }[]>([]);
-    const [users, setUsers] = useState<{name: string; flipped: boolean; }[]>([]);
+    const [users, setUsers] = useState<Player[]>([]);
     const [state, setState] = useState('ready');
     const [dropState, setDropState] = useState('no-dealing');
     const deckCardsRef = useRef<HTMLDivElement>(null);
@@ -79,8 +80,7 @@ const CardsGame = ({ modifier }: { mode: string; modifier: Item['modifier'] }) =
         }
 
         const result = users.map((user, index) => ({ ...user, score: scores[index] }));
-        console.log(result);
-
+        saveTodayScores(result);
     };
 
     return (
@@ -127,7 +127,7 @@ const CardsGame = ({ modifier }: { mode: string; modifier: Item['modifier'] }) =
                                         className='z-10'
                                         avoidFlip={true}
                                         content={user.name}
-                                        flipped={user.flipped}
+                                        flipped={false}
                                         delay={-(index * 0.25) + ((users.length - 1) * 0.25)}
                                         startPosition={startPosition}
                                         finalPosition={finalPositions[index]}

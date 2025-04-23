@@ -1,6 +1,7 @@
 import rouletteData from '@/data/roulette.json';
 import { useRouletteStore } from '@/store';
 import { getRandomOptionByNumberKey, handleModalState, shuffleItems } from '@/utils/utils';
+import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 import { FaCog } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -10,6 +11,7 @@ import RouletteLegend from './Roulette-legend';
 
 const ANIMATION_TIME = 5;
 const WINNING_ITEM_MODAL_ID = 'winning_item_mModal';
+const MANUAL_ROULETTE_ITEM_SELECTION_MODAL_ID = 'manual_roulette_item_selection_modal';
 
 export interface Item {
     index?: number;
@@ -47,11 +49,13 @@ const gamesData = rouletteData.games.reduce<Item[]>((acc, game) => {
         }, [])
     ];
 }, []);
+const modifiers = rouletteData.modifiers.filter(modifier => modifier.active);
 
 const DailyRoulette = () => {
     const [isSpinning, setIsSpinning] = useState(false);
     const { setSelectedItem } = useRouletteStore();
     const [winningItem, setWinningItem] = useState<Item>();
+    const [manualItem, setManualItem] = useState<Item>({...gamesData[0], modifier: modifiers[0] });
     const [items, setItems] = useState<Item[]>([]);
     const [showLegend, setShowLegend] = useState(true);
     const rouletteRef = useRef<HTMLDivElement>(null);
@@ -106,7 +110,6 @@ const DailyRoulette = () => {
         const itemsShuffled = shuffleItems<Item>(
             Array.from({ length: repetitions }, () => shuffleItems(gamesData)).flat()
         );
-        const modifiers = rouletteData.modifiers.filter(modifier => modifier.active);
         const eventIndex = Math.floor(Math.random() * rouletteData.events.length);
         const newItems = itemsShuffled.map((item, index) => ({
             ...item,
@@ -148,21 +151,73 @@ const DailyRoulette = () => {
             }
 
             {/* Start/go to game Button */}
-            <div className='m-10 flex gap-x-10 items-center'>
+            <div className='m-10 flex flex-col gap-y-4 items-center'>
                 {(!winningItem || isSpinning) &&
-                    <button className='btn btn-primary btn-xl' onClick={spinRoulette} disabled={isSpinning}>
-                        Start
-                        {isSpinning && <span className='loading loading-spinner'></span>}
-                    </button>
+                        <button className='btn btn-primary btn-lg w-50' onClick={spinRoulette} disabled={isSpinning}>
+                            Start roulette
+                            {isSpinning && <span className='loading loading-spinner'></span>}
+                        </button>
                 }
                 {!isSpinning && winningItem &&
-                    <Link to={`/daily/${winningItem?.slug}`} onClick={() => setSelectedItem(winningItem)} className='btn btn-primary btn-xl'>Go to game</Link>
+                        <Link to={`/daily/${winningItem?.slug}`} onClick={() => setSelectedItem(winningItem)} className='btn btn-primary btn-lg w-50'>Go to game</Link>
                 }
+                {!isSpinning && !winningItem &&
+                    <>
+                        <button className='btn btn-accent btn-lg w-50' onClick={() => handleModalState(MANUAL_ROULETTE_ITEM_SELECTION_MODAL_ID, 'showModal')} disabled={isSpinning}>
+                            Manual
+                        </button>
 
-                <button className='btn btn-secondary btn-lg btn-circle' onClick={() => handleModalState(CONFIGURATION_USERS_MODAL_ID, 'showModal')}>
-                    <FaCog />
-                </button>
+                        <button className='btn btn-secondary btn-lg btn-circle' onClick={() => handleModalState(CONFIGURATION_USERS_MODAL_ID, 'showModal')}>
+                            <FaCog />
+                        </button>
+                    </>
+                }
             </div>
+
+            {/* Manual roulette item selection modal */}
+            <dialog id={MANUAL_ROULETTE_ITEM_SELECTION_MODAL_ID} className='modal modal-bottom'>
+                <div className='modal-box overflow-auto flex flex-col items-center'>
+                    <p className='text-xl border-b-2 w-fit mt-2 px-2'>Modes:</p>
+                    <div className='flex flex-1 overflow-auto p-4 justify-center'>
+                        {gamesData.map((item, index) => (
+                            <div
+                                key={`${item.slug}-${index}`}
+                                className={clsx('flex items-center justify-center transition', {
+                                    'scale-105': item.slug === manualItem?.slug && item.type?.slug === manualItem.type?.slug
+                                })}
+                                onClick={() => setManualItem(item)}
+                            >
+                                <RouletteItem data={item} className={item.slug === manualItem?.slug && item.type?.slug === manualItem.type?.slug ? 'border-4 border-info' : ''} />
+                            </div>
+                        ))}
+                    </div>
+
+                    <p className='text-xl border-b-2 w-fit mt-2 px-2'>Modifiers:</p>
+                    <div className='flex flex-wrap pl-20 py-4 gap-x-6 gap-y-4 justify-center'>
+                        {modifiers.map(item => (
+                            <label key={item.name} className='flex items-center gap-2'>
+                                <input type='radio' name='radio-4' onChange={() => setManualItem({ ...manualItem as Item, modifier: item})} className='radio radio-primary' defaultChecked={manualItem.modifier?.slug == item.slug} />
+                                <span>{item.name}</span>
+                            </label>
+                            // <div key={item.name} className='flex'>{item.name}</div>
+                        ))}
+                    </div>
+                    <div className='modal-action justify-center'>
+                        <form method='dialog' >
+                            <Link
+                                to={`/daily/${manualItem?.slug}`}
+                                className={'btn btn-primary btn-lg'}
+                                onClick={() => setSelectedItem(manualItem as Item)}
+                            >
+                                Go to game
+                            </Link>
+                        </form>
+                    </div>
+                </div>
+                <form method='dialog' className='modal-backdrop'>
+                    <button>close</button>
+                </form>
+            </dialog>
 
             {/* Result modal */}
             <dialog id={WINNING_ITEM_MODAL_ID} className='modal'>

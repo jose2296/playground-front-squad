@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { Item } from './Roulette';
 
-export const ROULETTE_ITEM_SIZE = 160;
+export const ROULETTE_ITEM_SIZE = 180;
 export const ROULETTE_ITEM_MARGIN = 10;
 const ROULETTE_ITEM_INNER_SIZE = ROULETTE_ITEM_SIZE - (ROULETTE_ITEM_MARGIN * 2);
 
@@ -17,7 +17,7 @@ const types: { [key: string]: string } = {
     empty: 'bg-transparent'
 };
 
-const RouletteItem = ({ data, winningItem }: { data: Item, winningItem?: Item }) => {
+const RouletteItem = ({ data, winningItem, className }: { data: Item, winningItem?: Item; className?: string }) => {
 
     if (data.slug === 'empty') {
         return (
@@ -31,9 +31,11 @@ const RouletteItem = ({ data, winningItem }: { data: Item, winningItem?: Item })
     return (
         <div
             style={style}
-            className={clsx(itemClassName, { 'item-border-animated-wrapper': (!!data.event && winningItem?.index === data.index) })}
+            className={clsx(itemClassName, {
+                'item-border-animated-wrapper': (!!data.event && winningItem?.index === data.index)
+            })}
         >
-            <div className={`item-border-animated-content flex flex-col shrink-0 rounded-lg px-2 justify-center items-center bg-gradient-to-t ${types[data.type?.slug || 'empty']}`}>
+            <div className={`${className} item-border-animated-content flex flex-col shrink-0 rounded-lg px-2 justify-center items-center bg-gradient-to-t ${types[data.type?.slug || 'empty']}`}>
                 {/* <img src={data.typeImage} alt={data.name} className="w-10 h-12 object-cover" /> */}
                 <span className='flex flex-1 items-center justify-center text-center'>{data.type?.name}</span>
                 <div className='bg-slate-100 w-4/5 h-[1px] my-2'></div>
