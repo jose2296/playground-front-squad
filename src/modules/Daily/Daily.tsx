@@ -7,7 +7,7 @@ const Daily = ({ previousStep, nextStep }: HOCFunctions) => {
 
     return (
         <div className='flex flex-row flex-1 w-full'>
-            <div className='flex w-3/4 justify-center'>
+            <div className='flex w-3/4 justify-center pb-4'>
                 <Outlet context={{ previousStep, nextStep }} />
             </div>
             <div className='flex w-1/4 min-w-[280px] border-l-2 items-start'>

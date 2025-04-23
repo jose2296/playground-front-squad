@@ -28,15 +28,13 @@ const DailyGame = () => {
 
 
     return (
-        <div>
-            <div className='game'>
-                {gameIframeSrc &&
-                    <iframe src={gameIframeSrc} width={'500px'} height={'900px'} />
-                }
-                {selectedItem?.type?.slug === 'cards' &&
-                    <CardsGame mode={selectedItem.slug} modifier={selectedItem.modifier} />
-                }
-            </div>
+        <div className='flex w-full justify-center'>
+            {gameIframeSrc &&
+                <iframe src={gameIframeSrc} className='h-full w-sm outline-0 rounded-xl' />
+            }
+            {selectedItem?.type?.slug === 'cards' &&
+                <CardsGame mode={selectedItem.slug} modifier={selectedItem.modifier} />
+            }
             {/* <button onClick={previousStep}>Previous</button>
             <button onClick={nextStep}>NEXT</button> */}
         </div>

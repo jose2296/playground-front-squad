@@ -13,7 +13,7 @@ const Layout = () => {
 
     return (
         <div className='flex flex-col h-screen'>
-            <main className='flex-1 flex flex-col py-8 overflow-auto'>
+            <main className='flex-1 flex flex-col pt-8 overflow-auto'>
                 <div className='prose max-w-[100%] flex justify-center'>
                     <div className='flex flex-col items-center justify-center'>
                         <h1 className='text-primary border-b-4 border-primary rounded-sm text-4xl w-fit'>{currentStep.name}</h1>
