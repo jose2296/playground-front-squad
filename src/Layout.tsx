@@ -1,14 +1,52 @@
+import clsx from 'clsx';
+import { FaCog } from 'react-icons/fa';
 import { NavLink, Outlet } from 'react-router-dom';
+import ConfigurationModal, { CONFIGURATION_USERS_MODAL_ID } from './modules/Daily/Game/CardsGame/ConfigurationModal';
 import { useStore } from './store';
+import { handleModalState } from './utils/utils';
 
 const Layout = () => {
     const { steps, currentStep } = useStore();
 
-    // const navigate = useNavigate();
+    return (
+        <div className='flex flex-col h-screen'>
+            <div className='navbar bg-base-300 shadow-sm'>
+                <div className='flex'>
+                    <span className='btn btn-ghost text-xl'>Front Squad</span>
+                </div>
 
-    // useEffect(() => {
-    //     navigate(currentStep.route);
-    // }, [currentStep]);
+                <div className='divider divider-horizontal'></div>
+
+                <div className='flex-1 ml-2'>
+                    <ul className='flex gap-x-8 px-1'>
+                        {steps.length && steps.map((step, index) => (
+                            <li key={`step-${index}`} className={'cursor-pointer hover:opacity-70 transition duration-600'}>
+                                <NavLink
+                                    to={step.route}
+                                    viewTransition
+                                    // onClick={() => changeStep(step)}
+                                >
+                                    <span className={clsx('font-bold', {
+                                        'text-primary btn-active': currentStep.index === step.index
+                                    }) }>{step.name}</span>
+                                </NavLink>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <button className='mr-4 btn btn-primary btn-md btn-circle' onClick={() => handleModalState(CONFIGURATION_USERS_MODAL_ID, 'showModal')}>
+                    <FaCog size={20}/>
+                </button>
+            </div>
+            <Outlet />
+
+            {/* Config modal */}
+            <ConfigurationModal />
+        </div>
+    );
+
+
 
     return (
         <div className='flex flex-col h-screen'>

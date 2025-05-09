@@ -37,7 +37,7 @@ const ConfigurationModal = ({ updateUsers }: Props) => {
 
     const changeUserKey = (value: string, key: keyof Player, index: number) => {
         const _userForm = [...usersForm];
-        _userForm[index][key] = value;
+        (_userForm[index][key] as any) = value;
         setUsersForm([..._userForm]);
     };
 

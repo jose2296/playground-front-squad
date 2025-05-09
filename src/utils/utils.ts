@@ -46,3 +46,11 @@ export const getRandomRangeNumber = (min: number, max: number): number => {
 export const handleModalState = (modalId: string, state: 'showModal' | 'close') => {
     (document.getElementById(modalId) as HTMLDialogElement)[state]();
 };
+
+export const handleColor = (color: string) => {
+    if (color.startsWith('#')) {
+        return color;
+    }
+
+    return `#${color}`;
+};

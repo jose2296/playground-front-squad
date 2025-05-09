@@ -1,5 +1,6 @@
 import { useRouletteStore } from '@/store';
 import { saveTodayScores } from '@/utils/firebase';
+import { handleColor } from '@/utils/utils';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, onValue, ref } from 'firebase/database';
 import { motion } from 'motion/react';
@@ -52,18 +53,18 @@ const DailyScores = () => {
 
     return (
         <div className='flex flex-col flex-1 gap-4 items-center justify-center'>
-            <h1 className='text-center px-8 text-3xl border-b-2 rounded-bl-sm rounded-br-sm pb-2'>{month}</h1>
+            <h1 className='text-center px-4 text-3xl border-b-2 pb-2'>{month}</h1>
 
             {!summary.length &&
                 <p>No data yet.</p>
             }
 
-            <div className='flex flex-col w-full px-10 gap-2'>
+            <div className='flex flex-col w-full px-10 gap-3'>
                 {summary.map((user, index) => (
                     <motion.div layout transition={{ duration: 0.6 }} className='flex gap-2 text-xl justify-between' key={user.name}>
                         <div className='flex gap-2 items-center'>
                             {index + 1} -
-                            <div className='rounded-full w-6 h-6' style={{ backgroundColor: `#${user.color}` }}></div>
+                            <div className='rounded-full w-6 h-6' style={{ backgroundColor: handleColor(user.color) }}></div>
                             {user.name}
                         </div>
                         <CountUp end={user.score} duration={2} />

@@ -1,44 +1,47 @@
-import rouletteData from '@/data/roulette.json';
 import { FaInfoCircle } from 'react-icons/fa';
-import { Item } from './Roulette';
+import { events, Item, modifiers } from './Roulette';
 import RouletteItem, { ROULETTE_ITEM_SIZE } from './Roulette-item';
 
 const RouletteLegend = ({ gamesData }: { gamesData: Item[] }) => {
     return (
-        <div>
+        <div className='overflow-auto w-full'>
             {/* Games */}
             {gamesData?.length &&
-                <div className='flex flex-row flex-wrap items-center justify-center'>
+                <div className='flex w-full overflow-auto items-center pb-4 px-10 mask-r-from-90% mask-l-from-90%'>
                     {gamesData.map(game => (
                         <div style={{ maxWidth: `${ROULETTE_ITEM_SIZE}px`}} className={'flex flex-col items-center justify-center relative'} key={`${game.slug}-${game.type?.slug}`}>
                             <RouletteItem data={game} />
-                            <div style={{ maxWidth: `${ROULETTE_ITEM_SIZE}px`}} className='flex items-center gap-2 p-2 absolute -top-1 -right-1 z-10'>
-                                {/* <p className={`truncate`}>{'game.description game.description game.description game.description game.description'}</p> */}
-                                <div className='w-full tooltip cursor-pointer'>
-                                    <FaInfoCircle />
-                                    <div className='tooltip-content'>
-                                        <p>{`${game.type?.name} - ${game.name}`}</p>
-                                        <p>{game.description}</p>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     ))}
                 </div>
             }
-            {/* Modifiers */}
-            <div className='flex flex-col items-center justify-center'>
-                <h1 className='text-xl border-b-4 rounded-br-md px-6 mt-10 mb-4 rounded-bl-md border-primary text-center'>Modifiers</h1>
-                <div className='flex flex-row items-center justify-center flex-wrap'>
-                    {rouletteData.modifiers.filter(modifier => modifier.active).map((modifier, index) => (
-                        <div className={'flex items-center'} key={`${modifier.slug}`}>
-                            {modifier.name}
-                            {index !== rouletteData.modifiers.filter(modifier => modifier.active).length - 1 &&
-                                <div className='mx-4 h-6 w-0.5 inline-block bg-white' />
-                            }
+            {/* Modifiers and events*/}
+            <div className='flex flex-row items-center justify-center'>
+                {!!modifiers.length &&
+                    <div className='tooltip flex items-center justify-center gap-2'>
+                        <h1 className='text-xl border-primary text-center'>Modifiers</h1>
+                        <FaInfoCircle />
+
+                        <div className='tooltip-content'>
+                            <div className='flex flex-col gap-1 p-2'>
+                                {modifiers.map(modifier => <p key={modifier.name}>{modifier.name}</p>)}
+                            </div>
                         </div>
-                    ))}
-                </div>
+                    </div>
+                }
+                <div className='divider divider-horizontal'></div>
+                {!!events.length &&
+                    <div className='tooltip flex items-center justify-center gap-2'>
+                        <h1 className='text-xl border-primary text-center'>Events</h1>
+                        <FaInfoCircle />
+
+                        <div className='tooltip-content'>
+                            <div className='flex flex-col gap-1 p-2'>
+                                {events.map(modifier => <p key={modifier.name}>{modifier.name}</p>)}
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     );

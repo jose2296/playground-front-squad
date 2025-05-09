@@ -61,6 +61,10 @@ const router = createBrowserRouter([
             {
                 path: 'international-day',
                 element: <HOC Component={InternationalDay as any} index={2} />,
+            },
+            {
+                path: '*',
+                element: <Navigate to='/' />
             }
         ]
     },

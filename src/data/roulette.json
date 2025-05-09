@@ -20,7 +20,14 @@
                 {
                     "name": "Pinball",
                     "slug": "pinball",
-                    "active": false
+                    "description": "Las bolas mas locas que nunca.",
+                    "active": true
+                },
+                {
+                    "name": "Random Pinball",
+                    "slug": "random-pinball",
+                    "description": "Las bolas mas locas que nunca pero random.",
+                    "active": true
                 },
                 {
                     "name": "Smallville",
@@ -129,24 +136,24 @@
     ],
     "events": [
         {
-            "name": "Tonto el último",
-            "slug": "tonto-el-ultimo",
-            "active": false
+            "name": "Los ultimos serán los primeros",
+            "slug": "the-last-will-be-first",
+            "active": true
         },
         {
             "name": "Cero patatero",
-            "slug": "cero-patatero",
-            "active": false
+            "slug": "zero-patatero",
+            "active": true
         },
         {
-            "name": "Enpujoncito",
-            "slug": "enpujoncito",
+            "name": "Empujoncito",
+            "slug": "empujoncito",
             "active": false
         },
         {
             "name": "Puntos random",
             "slug": "random-points",
-            "active": false
+            "active": true
         }
     ]
 }

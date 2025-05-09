@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "build:deploy": "npm run build && npm run deploy",
+    "deploy": "firebase deploy",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -20,8 +21,8 @@
     "@types/react-dom": "^17.0.13",
     "clsx": "^2.1.1",
     "eslint-plugin-react": "^7.34.0",
-    "firebase": "^11.0.2",
-    "firebase-tools": "^13.27.0",
+    "firebase": "^11.6.1",
+    "firebase-tools": "^13.35.1",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
     "motion": "^12.7.4",

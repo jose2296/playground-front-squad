@@ -3,9 +3,7 @@ import { useRouletteStore } from '@/store';
 import { getRandomOptionByNumberKey, handleModalState, shuffleItems } from '@/utils/utils';
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
-import { FaCog } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { CONFIGURATION_USERS_MODAL_ID } from '../Game/CardsGame/ConfigurationModal';
 import RouletteItem, { ROULETTE_ITEM_MARGIN, ROULETTE_ITEM_SIZE } from './Roulette-item';
 import RouletteLegend from './Roulette-legend';
 
@@ -49,7 +47,8 @@ const gamesData = rouletteData.games.reduce<Item[]>((acc, game) => {
         }, [])
     ];
 }, []);
-const modifiers = rouletteData.modifiers.filter(modifier => modifier.active);
+export const modifiers = rouletteData.modifiers.filter(modifier => modifier.active);
+export const events = rouletteData.events.filter(event => event.active);
 
 const DailyRoulette = () => {
     const [isSpinning, setIsSpinning] = useState(false);
@@ -110,12 +109,12 @@ const DailyRoulette = () => {
         const itemsShuffled = shuffleItems<Item>(
             Array.from({ length: repetitions }, () => shuffleItems(gamesData)).flat()
         );
-        const eventIndex = Math.floor(Math.random() * rouletteData.events.length);
+        const eventIndex = Math.floor(Math.random() * events.length);
         const newItems = itemsShuffled.map((item, index) => ({
             ...item,
             index,
             modifier: item.type?.modifiersActivated ? getRandomOptionByNumberKey(modifiers, 'weight') : undefined,
-            event: Math.random() > 0.8 ? rouletteData.events[eventIndex] : undefined
+            event: Math.random() > 0.8 ? events[eventIndex] : undefined
         }));
 
         setItems(newItems);
@@ -133,7 +132,7 @@ const DailyRoulette = () => {
     };
 
     return (
-        <div className='flex flex-col items-center p-4 h-full justify-center overflow-auto'>
+        <div className='flex flex-col w-full items-center p-4 h-full justify-center'>
 
             {/* Legend */}
             {showLegend && <RouletteLegend gamesData={gamesData} />}
@@ -162,56 +161,71 @@ const DailyRoulette = () => {
                         <Link to={`/daily/${winningItem?.slug}`} onClick={() => setSelectedItem(winningItem)} className='btn btn-primary btn-lg w-50'>Go to game</Link>
                 }
                 {!isSpinning && !winningItem &&
-                    <>
-                        <button className='btn btn-accent btn-lg w-50' onClick={() => handleModalState(MANUAL_ROULETTE_ITEM_SELECTION_MODAL_ID, 'showModal')} disabled={isSpinning}>
-                            Manual
-                        </button>
-
-                        <button className='btn btn-secondary btn-lg btn-circle' onClick={() => handleModalState(CONFIGURATION_USERS_MODAL_ID, 'showModal')}>
-                            <FaCog />
-                        </button>
-                    </>
+                    <button className='btn btn-accent btn-lg w-50' onClick={() => handleModalState(MANUAL_ROULETTE_ITEM_SELECTION_MODAL_ID, 'showModal')} disabled={isSpinning}>
+                        Manual
+                    </button>
                 }
             </div>
 
             {/* Manual roulette item selection modal */}
-            <dialog id={MANUAL_ROULETTE_ITEM_SELECTION_MODAL_ID} className='modal modal-bottom'>
-                <div className='modal-box overflow-auto flex flex-col items-center'>
-                    <p className='text-xl border-b-2 w-fit mt-2 px-2'>Modes:</p>
-                    <div className='flex flex-1 overflow-auto p-4 justify-center'>
-                        {gamesData.map((item, index) => (
-                            <div
-                                key={`${item.slug}-${index}`}
-                                className={clsx('flex items-center justify-center transition', {
-                                    'scale-105': item.slug === manualItem?.slug && item.type?.slug === manualItem.type?.slug
-                                })}
-                                onClick={() => setManualItem(item)}
-                            >
-                                <RouletteItem data={item} className={item.slug === manualItem?.slug && item.type?.slug === manualItem.type?.slug ? 'border-4 border-info' : ''} />
-                            </div>
-                        ))}
-                    </div>
+            <dialog id={MANUAL_ROULETTE_ITEM_SELECTION_MODAL_ID} className='modal'>
+                <div className='modal-box overflow-auto flex flex-col items-center min-w-3xl'>
+                    <div className='flex flex-col w-full items-center'>
+                        <p className='text-xl border-b-2 w-fit mt-2 px-2'>Modes:</p>
+                        <div className='flex w-full overflow-auto p-4'>
+                            {gamesData.map((item, index) => (
+                                <div
+                                    key={`${item.slug}-${index}`}
+                                    className={clsx('flex items-center justify-center transition', {
+                                        'scale-105': item.slug === manualItem?.slug && item.type?.slug === manualItem.type?.slug
+                                    })}
+                                    onClick={() => setManualItem(item)}
+                                >
+                                    <RouletteItem data={item} className={item.slug === manualItem?.slug && item.type?.slug === manualItem.type?.slug ? 'border-4 border-info' : ''} />
+                                </div>
+                            ))}
+                        </div>
 
-                    <p className='text-xl border-b-2 w-fit mt-2 px-2'>Modifiers:</p>
-                    <div className='flex flex-wrap pl-20 py-4 gap-x-6 gap-y-4 justify-center'>
-                        {modifiers.map(item => (
-                            <label key={item.name} className='flex items-center gap-2'>
-                                <input type='radio' name='radio-4' onChange={() => setManualItem({ ...manualItem as Item, modifier: item})} className='radio radio-primary' defaultChecked={manualItem.modifier?.slug == item.slug} />
-                                <span>{item.name}</span>
-                            </label>
-                            // <div key={item.name} className='flex'>{item.name}</div>
-                        ))}
-                    </div>
-                    <div className='modal-action justify-center'>
-                        <form method='dialog' >
-                            <Link
-                                to={`/daily/${manualItem?.slug}`}
-                                className={'btn btn-primary btn-lg'}
-                                onClick={() => setSelectedItem(manualItem as Item)}
-                            >
-                                Go to game
-                            </Link>
-                        </form>
+                        {!!modifiers.length &&
+                            <>
+                                <p className='text-xl border-b-2 w-fit mt-2 px-2'>Modifiers:</p>
+                                <div className='grid grid-cols-2 py-6 gap-x-6 gap-y-4 justify-center'>
+                                    {modifiers.map(item => (
+                                        <label key={item.name} className='flex items-center gap-2'>
+                                            <input type='radio' name='radio-4' onChange={() => setManualItem({ ...manualItem as Item, modifier: item })} className='radio radio-primary' checked={manualItem.modifier?.slug == item.slug} />
+                                            <span>{item.name}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </>
+                        }
+
+                        {!!events.length &&
+                            <>
+                                <p className='text-xl border-b-2 w-fit mt-2 px-2'>Events:</p>
+                                <div className='grid grid-cols-3 py-6 gap-x-6 gap-y-4 justify-center'>
+                                    {events.map(item => (
+                                        <label key={item.name} className='flex items-center gap-2'>
+                                            <input type='radio' name='radio-4' onChange={() => setManualItem({ ...manualItem as Item, event: item })} className='radio radio-primary' checked={manualItem.event?.slug == item.slug} />
+                                            <span>{item.name}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </>
+                        }
+
+                        <div className='modal-action justify-center'>
+                            <form method='dialog' >
+                                <Link
+                                    to={`/daily/${manualItem?.slug}`}
+                                    className={'btn btn-primary btn-lg'}
+                                    onClick={() => setSelectedItem(manualItem as Item)}
+                                >
+                                    Go to game
+                                </Link>
+                            </form>
+                        </div>
+
                     </div>
                 </div>
                 <form method='dialog' className='modal-backdrop'>
@@ -225,7 +239,7 @@ const DailyRoulette = () => {
                     <div className='flex flex-col items-center justify-center'>
                         {winningItem &&
                             <>
-                                <RouletteItem data={winningItem} winningItem={winningItem}/>
+                                <RouletteItem data={winningItem} winningItem={winningItem} />
                                 {winningItem?.modifier &&
                                         <p>Modificador: <span className='font-bold'>{winningItem?.modifier?.name}</span></p>
                                 }
