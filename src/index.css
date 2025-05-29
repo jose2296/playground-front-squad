@@ -1,13 +1,121 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import 'tailwindcss';
+
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark, dracula;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@theme {
+    --animate-card-shuffle: card-shuffle .5s forwards;
+
+    @keyframes card-shuffle {
+        0% {
+            transform: translateX(0);
+            z-index: 3;
+        }
+
+        50% {
+            transform: translateX(20px) translateY(15px);
+            z-index: 2;
+        }
+
+        100% {
+            transform: translateX(0);
+            z-index: 1;
+        }
+    }
+
+
+    --animate-border-spin: border-spin 2s linear infinite;
+
+    @keyframes border-spin {
+        100% {
+            transform: rotate(-360deg)
+        }
+    }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentcolor);
+    }
+
+    /* ----------------- Start Border animated ----------------- */
+    .item-border-animated-wrapper {
+        @apply relative overflow-hidden;
+    }
+
+    .item-border-animated-wrapper::before {
+        background: conic-gradient(rgb(255, 255, 0) 0deg,
+                rgba(255, 216, 0) 0deg,
+                transparent 80deg);
+        @apply absolute left-[-25%] top-[-25%] h-[150%] w-[150%] animate-border-spin content-[''];
+    }
+
+    .item-border-animated-wrapper::after {
+        background: conic-gradient(rgb(255, 255, 0) 0deg,
+                rgba(255, 216, 0) 0deg,
+                transparent 80deg);
+        @apply absolute left-[-25%] top-[-25%] h-[150%] w-[150%] animate-border-spin rotate-180 content-[''];
+    }
+
+    .item-border-animated-content {
+        @apply absolute z-10 left-[4px] top-[4px] h-[calc(100%-8px)] w-[calc(100%-8px)];
+    }
+
+    /* ----------------- End Border animated ----------------- */
+
+
+    .preserve-3d {
+        transform-style: preserve-3d;
+    }
+
+    .card-item {
+        @apply w-30 h-48 2xl:w-40 2xl:h-60;
+    }
+}
+
+* {
+    font-family: sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    box-shadow: none;
+    border: 0;
+    background-color: transparent;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: none;
+    border-radius: 20px;
+    background-color: #ffffff4d;
+
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #fff;
+    transition: 1s;
+    border-radius: 20px;
+    /* border: solid 1px var(--color-secondary);; */
+    /* box-shadow: 0 4px 4px 0 rgba(112, 112, 112, 0.432); */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ffffff7c;
 }

@@ -1,0 +1,159 @@
+{
+    "games": [
+        {
+            "name": "Las Bolas locas",
+            "slug": "balls",
+            "modifiersActivated": true,
+            "modes": [
+                {
+                    "name": "Classic",
+                    "slug": "classic",
+                    "description": "Las Bolas locas clásicas, las de toda la vida.",
+                    "active": true
+                },
+                {
+                    "name": "Anonymous",
+                    "slug": "anonymous",
+                    "description": "Nadie sabe quien gana hasta el final.",
+                    "active": false
+                },
+                {
+                    "name": "Pinball",
+                    "slug": "pinball",
+                    "description": "Las bolas mas locas que nunca.",
+                    "active": true
+                },
+                {
+                    "name": "Random Pinball",
+                    "slug": "random-pinball",
+                    "description": "Las bolas mas locas que nunca pero random.",
+                    "active": true
+                },
+                {
+                    "name": "Smallville",
+                    "slug": "smallville",
+                    "description": "Las Bolas locas de siempre pero mas chiquitas.",
+                    "active": true
+                },
+                {
+                    "name": "Smallville random",
+                    "slug": "smallville-random",
+                    "description": "Las Bolas locas se siempre pero cada uno con un tamaña aleatorio.",
+                    "active": true
+                },
+                {
+                    "name": "Mario Kart",
+                    "slug": "mario-kart",
+                    "active": false
+                },
+                {
+                    "name": "Route 66",
+                    "slug": "route-66",
+                    "active": false
+                },
+                {
+                    "name": "Demolición",
+                    "slug": "demolition",
+                    "active": false
+                },
+                {
+                    "name": "Piruliii",
+                    "slug": "piruli",
+                    "active": false
+                },
+                {
+                    "name": "Totem",
+                    "slug": "totem",
+                    "active": false
+                },
+                {
+                    "name": "Handicap",
+                    "slug": "handicap",
+                    "active": false
+                },
+                {
+                    "name": "El club de la lucha",
+                    "slug": "fight-club",
+                    "active": false
+                }
+            ]
+        },
+        {
+            "name": "Cards",
+            "slug": "cards",
+            "modifiersActivated": false,
+            "modes": [
+                {
+                    "name": "Classic",
+                    "slug": "classic",
+                    "description": "Las cartas clásicas.",
+                    "active": true
+                },
+                {
+                    "name": "Sandro Rey",
+                    "slug": "sandro-rey",
+                    "active": false
+                },
+                {
+                    "name": "Pescapatos",
+                    "slug": "pescapatos",
+                    "active": false
+                }
+            ]
+        }
+    ],
+    "modifiers": [
+        {
+            "name": "Normal",
+            "slug": "normal",
+            "active": true,
+            "weight": 0.6
+        },
+        {
+            "name": "Puntos invertidos",
+            "slug": "inverted-points",
+            "active": true,
+            "weight": 0.1333
+        },
+        {
+            "name": "Puntos random",
+            "slug": "random-points",
+            "active": true,
+            "weight": 0.1333
+        },
+        {
+            "name": "Puntos random por posición",
+            "slug": "random-position-points",
+            "active": true,
+            "weight": 0.1333
+        },
+        {
+            "name": "Puntos random invertidos por posición",
+            "slug": "random-inverted-position-points",
+            "active": true,
+            "weight": 0.1333
+        }
+    ],
+    "events": [
+        {
+            "name": "Los ultimos serán los primeros",
+            "slug": "the-last-will-be-first",
+            "active": true
+        },
+        {
+            "name": "Cero patatero",
+            "slug": "zero-patatero",
+            "active": true
+        },
+        {
+            "name": "Empujoncito",
+            "slug": "empujoncito",
+            "active": false
+        },
+        {
+            "name": "Puntos random",
+            "slug": "random-points",
+            "active": true
+        }
+    ]
+}
