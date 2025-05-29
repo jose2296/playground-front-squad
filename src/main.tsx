@@ -10,7 +10,6 @@ import Layout from './Layout';
 import Daily from './modules/Daily/Daily';
 import DailyGame from './modules/Daily/Game/DailyGame';
 import DailyRoulette from './modules/Daily/Roulette/Roulette';
-import InternationalDay from './modules/InternationalDay';
 import { Links } from './modules/Links';
 import { useStore } from './store';
 
@@ -57,10 +56,6 @@ const router = createBrowserRouter([
                         element: <DailyGame />
                     }
                 ]
-            },
-            {
-                path: 'international-day',
-                element: <HOC Component={InternationalDay as any} index={2} />,
             },
             {
                 path: '*',
