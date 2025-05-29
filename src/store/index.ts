@@ -11,11 +11,6 @@ const steps = [
         index: 1,
         name: 'Daily',
         route: '/daily'
-    },
-    {
-        index: 2,
-        name: 'International Day',
-        route: '/international-day'
     }
 ];
 
